@@ -1,6 +1,5 @@
 import { identity, perspective } from "./engine/math";
 import * as Scene from "./scene";
-import * as Player from "./player";
 export let state = {
   hasCoil: false,
   lives: 0,
@@ -24,7 +23,6 @@ export let init = (canvas) => {
   aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
   Scene.init(gl);
-  Player.init(gl);
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -46,7 +44,6 @@ let resize = () => {
 export let update = (delta) => {
   resize();
   Scene.update(delta);
-  Player.update(delta);
 };
 
 export let draw = () => {
@@ -54,5 +51,4 @@ export let draw = () => {
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   Scene.draw(gl, projection);
-  Player.draw(gl, projection);
 };
