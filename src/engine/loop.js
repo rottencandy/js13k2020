@@ -1,3 +1,8 @@
+/**
+ * Start the game loop
+ *
+ * @param {(delta: number) => void} step update function
+ */
 export let startLoop = (step) => {
   let last = 0;
   let loop = function(now) {
