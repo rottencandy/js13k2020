@@ -1,4 +1,3 @@
-import { identity, perspective } from "./engine/math";
 import * as Scene from "./scene";
 export let state = {
   hasCoil: false,
@@ -11,18 +10,13 @@ export let state = {
 //  state.hasCoil = true;
 //});
 
-let gl,
-  projection = identity(),
-  aspect,
-  fov = (45 * Math.PI) / 180, // in radians
-  zNear = 0.1,
-  zFar = 100.0;
+let gl, aspectRatio;
 
 export let init = (canvas) => {
   gl = canvas.getContext("webgl", { antialias: false });
-  aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  aspectRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
-  Scene.init(gl);
+  Scene.init(gl, aspectRatio);
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -38,6 +32,7 @@ let resize = () => {
   if (gl.canvas.width != width || gl.canvas.height != height) {
     gl.canvas.width = width;
     gl.canvas.height = height;
+    aspectRatio = width / height;
   }
 };
 
@@ -47,8 +42,6 @@ export let update = (delta) => {
 };
 
 export let draw = () => {
-  projection = perspective(projection, fov, aspect, zNear, zFar);
-
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  Scene.draw(gl, projection);
+  Scene.draw(gl);
 };

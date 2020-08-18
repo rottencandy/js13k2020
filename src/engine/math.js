@@ -335,29 +335,31 @@ export let transform = (mat, options) => {
  * Optional: a "up" vector can be defined to tilt the camera on one side (vertical by default).
  *
  * @param {Float32Array} mat 4x4 Matrix
- * @param {number} cameraX Camera position x
- * @param {number} cameraY Camera position y
- * @param {number} cameraZ Camera position z
- * @param {number} targetX Look at position x
- * @param {number} targetY Look at position y
- * @param {number} targetZ Look at position z
+ * @param {number} targetX Camera position x
+ * @param {number} targetY Camera position y
+ * @param {number} targetZ Camera position z
+ * @param {number} cameraX Look at position x
+ * @param {number} cameraY Look at position y
+ * @param {number} cameraZ Look at position z
  * @param {number} upX Tilt camera in x
  * @param {number} upY Tilt camera in y
  * @param {number} upZ Tilt camera in z
  */
 export let lookAt = (
   mat,
-  cameraX,
-  cameraY,
-  cameraZ,
-  targetX,
-  targetY,
-  targetZ,
-  upX = 0,
-  upY = 1,
-  upZ = 0
+  {
+    cameraX,
+    cameraY,
+    cameraZ,
+    targetX,
+    targetY,
+    targetZ,
+    upX = 0,
+    upY = 1,
+    upZ = 0,
+  }
 ) => {
-  var e, fx, fy, fz, rlf, sx, sy, sz, rls, ux, uy, uz;
+  var fx, fy, fz, rlf, sx, sy, sz, rls, ux, uy, uz;
   fx = targetX - cameraX;
   fy = targetY - cameraY;
   fz = targetZ - cameraZ;

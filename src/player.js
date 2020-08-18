@@ -20,6 +20,10 @@ void main() {
   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }`;
 
+export let velocity = 0,
+  drift = 0,
+  rot = 0;
+
 let program,
   modelMatrixPos,
   projectionMatrixPos,
@@ -29,10 +33,8 @@ let program,
   modelView = identity(),
   ACCEL = 1.5,
   DECEL = 1,
-  velocity = 0,
-  drift = 0,
-  MAXVEL = 5,
-  rot = 0;
+  MAXVEL = 3;
+
 export let init = (gl) => {
   program = compile(gl, vshader, fshader);
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
@@ -53,18 +55,16 @@ export let init = (gl) => {
 
 export let update = (delta) => {
   rot = 0;
-  if (Key.up || Key.down) {
-    if (Key.up) {
-      velocity += ACCEL * delta;
+  if (Key.up) {
+    velocity += ACCEL * delta;
+  } else if (velocity > 0) {
+    velocity -= DECEL * delta;
+    if (velocity > MAXVEL) {
+      velocity = MAXVEL;
     }
-    if (Key.down) {
-      velocity -= ACCEL * delta;
-    }
-  } else if (velocity) {
-    velocity += velocity > 0 ? -DECEL * delta : DECEL * delta;
-    if (Math.abs(velocity) > MAXVEL) {
-      velocity = velocity > MAXVEL ? MAXVEL : -MAXVEL;
-    }
+  } else {
+    // Safety net for negative velocity
+    velocity = 0;
   }
   if (Key.right) {
     rot -= 4 * delta;

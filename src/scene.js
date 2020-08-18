@@ -1,5 +1,6 @@
 import { compile, makeBuffer } from "./engine/gl";
 import { identity, transform } from "./engine/math";
+import * as Camera from "./engine/camera";
 import * as Player from "./player";
 
 // Vertex shader
@@ -26,7 +27,7 @@ let program,
   vertexPos,
   modelView = identity();
 
-export let init = (gl) => {
+export let init = (gl, aspect) => {
   program = compile(gl, vshader, fshader);
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
   projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
@@ -46,18 +47,22 @@ export let init = (gl) => {
 
   // Initialize children nodes
   Player.init(gl);
+
+  // Initialize camera
+  Camera.init(aspect);
 };
 
 export let update = (delta) => {
+  Camera.update();
   // Update children nodes
   Player.update(delta);
 };
 
-export let draw = (gl, projection) => {
+export let draw = (gl) => {
   gl.useProgram(program);
 
   gl.uniformMatrix4fv(modelMatrixPos, false, modelView);
-  gl.uniformMatrix4fv(projectionMatrixPos, false, projection);
+  gl.uniformMatrix4fv(projectionMatrixPos, false, Camera.projection);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0);
@@ -66,5 +71,5 @@ export let draw = (gl, projection) => {
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
   // Draw children nodes
-  Player.draw(gl, projection, modelView);
+  Player.draw(gl, Camera.projection, modelView);
 };
