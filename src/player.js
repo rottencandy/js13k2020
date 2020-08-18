@@ -1,5 +1,6 @@
 import { compile, makeBuffer } from "./engine/gl";
 import { identity, transform } from "./engine/math";
+import { Key } from "./engine/input";
 
 // Vertex shader
 let vshader = `
@@ -10,7 +11,7 @@ uniform mat4 uProjectionMatrix;
 uniform mat4 uParentMatrix;
 
 void main() {
-  gl_Position = uProjectionMatrix * uModelViewMatrix * uParentMatrix * aVertexPosition;
+  gl_Position = uProjectionMatrix * uParentMatrix * uModelViewMatrix * aVertexPosition;
 }`;
 
 // Fragment shader
@@ -25,8 +26,13 @@ let program,
   parentMatrixPos,
   buffer,
   vertexPos,
-  modelView = identity();
-
+  modelView = identity(),
+  ACCEL = 1.5,
+  DECEL = 1,
+  velocity = 0,
+  drift = 0,
+  MAXVEL = 5,
+  rot = 0;
 export let init = (gl) => {
   program = compile(gl, vshader, fshader);
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
@@ -45,7 +51,41 @@ export let init = (gl) => {
   modelView = transform(modelView, { z: 1, sx: 0.01, sy: 0.01 });
 };
 
-export let update = (_delta) => {};
+export let update = (delta) => {
+  rot = 0;
+  if (Key.up || Key.down) {
+    if (Key.up) {
+      velocity += ACCEL * delta;
+    }
+    if (Key.down) {
+      velocity -= ACCEL * delta;
+    }
+  } else if (velocity) {
+    velocity += velocity > 0 ? -DECEL * delta : DECEL * delta;
+    if (Math.abs(velocity) > MAXVEL) {
+      velocity = velocity > MAXVEL ? MAXVEL : -MAXVEL;
+    }
+  }
+  if (Key.right) {
+    rot -= 4 * delta;
+    if (velocity > 0.5) {
+      drift -= ACCEL * delta;
+    }
+  }
+  if (Key.left) {
+    rot += 4 * delta;
+    if (velocity > 0.5) {
+      drift += ACCEL * delta;
+    }
+  }
+  if (drift) {
+    drift += drift > 0 ? -DECEL * delta : DECEL * delta;
+    if (Math.abs(drift) > MAXVEL) {
+      drift = drift > MAXVEL ? MAXVEL : -MAXVEL;
+    }
+  }
+  modelView = transform(modelView, { y: velocity, x: drift, rz: rot });
+};
 
 export let draw = (gl, projection, parentMatrix) => {
   gl.useProgram(program);

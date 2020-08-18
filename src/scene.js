@@ -42,7 +42,7 @@ export let init = (gl) => {
     1.0,
     -1.0, // bottom right
   ]);
-  modelView = transform(modelView, { z: -2, sx: 2.0, sy: 2.0 });
+  modelView = transform(modelView, { z: -2, sx: 2, sy: 2 });
 
   // Initialize children nodes
   Player.init(gl);
@@ -64,6 +64,7 @@ export let draw = (gl, projection) => {
   gl.enableVertexAttribArray(vertexPos);
 
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
   // Draw children nodes
   Player.draw(gl, projection, modelView);
 };
