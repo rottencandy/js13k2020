@@ -1,3 +1,4 @@
+import * as Camera from "./engine/camera";
 import * as Scene from "./scene";
 export let state = {
   hasCoil: false,
@@ -10,16 +11,16 @@ export let state = {
 //  state.hasCoil = true;
 //});
 
-let gl, aspectRatio;
+let gl;
 
 export let init = (canvas) => {
   gl = canvas.getContext("webgl", { antialias: false });
-  aspectRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
-  Scene.init(gl, aspectRatio);
+  Camera.update(gl.canvas.width, gl.canvas.height);
+  Scene.init(gl);
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.2, 0.2, 0.2, 1.0);
   gl.clearDepth(1.0);
   gl.enable(gl.DEPTH_TEST);
   gl.enable(gl.CULL_FACE);
@@ -32,7 +33,7 @@ let resize = () => {
   if (gl.canvas.width != width || gl.canvas.height != height) {
     gl.canvas.width = width;
     gl.canvas.height = height;
-    aspectRatio = width / height;
+    Camera.update(width, height);
   }
 };
 

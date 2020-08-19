@@ -1,194 +1,76 @@
-// Source for all matrix-related functions: https://github.com/xem/webgl-guide/blob/gh-pages/lib/matrix.js
-export let round = (num) => {
-  return (num + 0.5) << 0;
-};
+export let radToDeg = r => r * 180 / Math.PI;
+export let degToRad = d => d * Math.PI / 180;
 
-export let floor = (num) => {
-  return num << 0;
-};
+export let cross = (a, b) => new Float32Array(
+    [a[1] * b[2] - a[2] * b[1],
+     a[2] * b[0] - a[0] * b[2],
+     a[0] * b[1] - a[1] * b[0]]);
 
-/**
- * Create projection matrix
- *
- * @param {Float32Array} out Target 4x4 Matrix
- * @param {number} fov Field of View
- * @param {number} aspect aspect ratio
- * @param {number} near near clip point
- * @param {number} far far clip point
- */
-export let perspective = (out, fov, aspect, near, far) => {
-  let f = 1.0 / Math.tan(fov / 2),
-    nf;
-  out[0] = f / aspect;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = f;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[11] = -1;
-  out[12] = 0;
-  out[13] = 0;
-  out[15] = 0;
-  if (far != null && far !== Infinity) {
-    nf = 1 / (near - far);
-    out[10] = (far + near) * nf;
-    out[14] = 2 * far * near * nf;
+export let subtractVectors = (a, b) => new Float32Array([a[0] - b[0], a[1] - b[1], a[2] - b[2]]);
+
+export let normalize = (v) => {
+  let length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  // make sure we don't divide by 0.
+  if (length > 0.00001) {
+    return [v[0] / length, v[1] / length, v[2] / length];
   } else {
-    out[10] = -1;
-    out[14] = -2 * near;
+    return [0, 0, 0];
   }
-  return out;
-};
-
-/**
- * Get the inverse of a mat4
- * The mat4 is not modified, a new mat4 is returned
- *
- * @param {Float32Array} m 4x4 Matrix
- */
-export let inverse = (m) => {
-  var inv = new Float32Array([
-    m[5] * m[10] * m[15] -
-      m[5] * m[11] * m[14] -
-      m[9] * m[6] * m[15] +
-      m[9] * m[7] * m[14] +
-      m[13] * m[6] * m[11] -
-      m[13] * m[7] * m[10],
-    -m[1] * m[10] * m[15] +
-      m[1] * m[11] * m[14] +
-      m[9] * m[2] * m[15] -
-      m[9] * m[3] * m[14] -
-      m[13] * m[2] * m[11] +
-      m[13] * m[3] * m[10],
-    m[1] * m[6] * m[15] -
-      m[1] * m[7] * m[14] -
-      m[5] * m[2] * m[15] +
-      m[5] * m[3] * m[14] +
-      m[13] * m[2] * m[7] -
-      m[13] * m[3] * m[6],
-    -m[1] * m[6] * m[11] +
-      m[1] * m[7] * m[10] +
-      m[5] * m[2] * m[11] -
-      m[5] * m[3] * m[10] -
-      m[9] * m[2] * m[7] +
-      m[9] * m[3] * m[6],
-    -m[4] * m[10] * m[15] +
-      m[4] * m[11] * m[14] +
-      m[8] * m[6] * m[15] -
-      m[8] * m[7] * m[14] -
-      m[12] * m[6] * m[11] +
-      m[12] * m[7] * m[10],
-    m[0] * m[10] * m[15] -
-      m[0] * m[11] * m[14] -
-      m[8] * m[2] * m[15] +
-      m[8] * m[3] * m[14] +
-      m[12] * m[2] * m[11] -
-      m[12] * m[3] * m[10],
-    -m[0] * m[6] * m[15] +
-      m[0] * m[7] * m[14] +
-      m[4] * m[2] * m[15] -
-      m[4] * m[3] * m[14] -
-      m[12] * m[2] * m[7] +
-      m[12] * m[3] * m[6],
-    m[0] * m[6] * m[11] -
-      m[0] * m[7] * m[10] -
-      m[4] * m[2] * m[11] +
-      m[4] * m[3] * m[10] +
-      m[8] * m[2] * m[7] -
-      m[8] * m[3] * m[6],
-    m[4] * m[9] * m[15] -
-      m[4] * m[11] * m[13] -
-      m[8] * m[5] * m[15] +
-      m[8] * m[7] * m[13] +
-      m[12] * m[5] * m[11] -
-      m[12] * m[7] * m[9],
-    -m[0] * m[9] * m[15] +
-      m[0] * m[11] * m[13] +
-      m[8] * m[1] * m[15] -
-      m[8] * m[3] * m[13] -
-      m[12] * m[1] * m[11] +
-      m[12] * m[3] * m[9],
-    m[0] * m[5] * m[15] -
-      m[0] * m[7] * m[13] -
-      m[4] * m[1] * m[15] +
-      m[4] * m[3] * m[13] +
-      m[12] * m[1] * m[7] -
-      m[12] * m[3] * m[5],
-    -m[0] * m[5] * m[11] +
-      m[0] * m[7] * m[9] +
-      m[4] * m[1] * m[11] -
-      m[4] * m[3] * m[9] -
-      m[8] * m[1] * m[7] +
-      m[8] * m[3] * m[5],
-    -m[4] * m[9] * m[14] +
-      m[4] * m[10] * m[13] +
-      m[8] * m[5] * m[14] -
-      m[8] * m[6] * m[13] -
-      m[12] * m[5] * m[10] +
-      m[12] * m[6] * m[9],
-    m[0] * m[9] * m[14] -
-      m[0] * m[10] * m[13] -
-      m[8] * m[1] * m[14] +
-      m[8] * m[2] * m[13] +
-      m[12] * m[1] * m[10] -
-      m[12] * m[2] * m[9],
-    -m[0] * m[5] * m[14] +
-      m[0] * m[6] * m[13] +
-      m[4] * m[1] * m[14] -
-      m[4] * m[2] * m[13] -
-      m[12] * m[1] * m[6] +
-      m[12] * m[2] * m[5],
-    m[0] * m[5] * m[10] -
-      m[0] * m[6] * m[9] -
-      m[4] * m[1] * m[10] +
-      m[4] * m[2] * m[9] +
-      m[8] * m[1] * m[6] -
-      m[8] * m[2] * m[5],
-  ]);
-  det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
-  if (!det) return m;
-  det = 1 / det;
-  for (var i = 0; i < 16; i++) {
-    inv[i] *= det;
-  }
-  return inv;
-};
-
-/**
- * Transpose a matrix
- *
- * @param {Float32Array} m 4x4 Matrix
- */
-export let transpose = (m) => {
-  return new Float32Array([
-    m[0],
-    m[4],
-    m[8],
-    m[12],
-    m[1],
-    m[5],
-    m[9],
-    m[13],
-    m[2],
-    m[6],
-    m[10],
-    m[14],
-    m[3],
-    m[7],
-    m[11],
-    m[15],
-  ]);
 };
 
 /**
  * Returns a 4x4 identity matrix
  */
-export let identity = () =>
-  new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+export let identity = () => {
+  return new Float32Array([
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  ]);
+};
+
+// Note: This matrix flips the Y axis so that 0 is at the top.
+export let orthographic = (left, right, bottom, top, near, far) => new Float32Array([
+  2 / (right - left), 0, 0, 0,
+  0, 2 / (top - bottom), 0, 0,
+  0, 0, 2 / (near - far), 0,
+
+  (left + right) / (left - right),
+  (bottom + top) / (bottom - top),
+  (near + far) / (near - far),
+  1,
+]);
+
+// Create a perspective matrix
+export let perspective = (FOVInRadians, aspect, near, far) => {
+  let f = Math.tan(Math.PI * 0.5 - 0.5 * FOVInRadians);
+  let rangeInv = 1.0 / (near - far);
+
+  return new Float32Array([
+    f / aspect, 0, 0, 0,
+    0, f, 0, 0,
+    0, 0, (near + far) * rangeInv, -1,
+    0, 0, near * far * rangeInv * 2, 0
+  ]);
+};
+
+export let camLookAt = (cameraPosition, target, up) => {
+  let zAxis = normalize(
+      subtractVectors(cameraPosition, target));
+  let xAxis = normalize(cross(up, zAxis));
+  let yAxis = normalize(cross(zAxis, xAxis));
+
+  return [
+     xAxis[0], xAxis[1], xAxis[2], 0,
+     yAxis[0], yAxis[1], yAxis[2], 0,
+     zAxis[0], zAxis[1], zAxis[2], 0,
+     cameraPosition[0],
+     cameraPosition[1],
+     cameraPosition[2],
+     1,
+  ];
+}
 
 /**
  * Compute the multiplication of two mat4 (c = a x b)
@@ -196,18 +78,18 @@ export let identity = () =>
  * @param {Float32Array} a 4x4 Matrix
  * @param {Float32Array} b 4x4 Matrix
  */
-export let multiplyMat4 = (a, b) => {
+export let multMat4Mat4 = (a, b) => {
   let i, ai0, ai1, ai2, ai3;
   let c = new Float32Array(16);
   for (i = 0; i < 4; i++) {
     ai0 = a[i];
-    ai1 = a[i + 4];
-    ai2 = a[i + 8];
-    ai3 = a[i + 12];
-    c[i] = ai0 * b[0] + ai1 * b[1] + ai2 * b[2] + ai3 * b[3];
-    c[i + 4] = ai0 * b[4] + ai1 * b[5] + ai2 * b[6] + ai3 * b[7];
-    c[i + 8] = ai0 * b[8] + ai1 * b[9] + ai2 * b[10] + ai3 * b[11];
-    c[i + 12] = ai0 * b[12] + ai1 * b[13] + ai2 * b[14] + ai3 * b[15];
+    ai1 = a[i+4];
+    ai2 = a[i+8];
+    ai3 = a[i+12];
+    c[i]    = ai0 * b[0]  + ai1 * b[1]  + ai2 * b[2]  + ai3 * b[3];
+    c[i+4]  = ai0 * b[4]  + ai1 * b[5]  + ai2 * b[6]  + ai3 * b[7];
+    c[i+8]  = ai0 * b[8]  + ai1 * b[9]  + ai2 * b[10] + ai3 * b[11];
+    c[i+12] = ai0 * b[12] + ai1 * b[13] + ai2 * b[14] + ai3 * b[15];
   }
   return c;
 };
@@ -220,181 +102,171 @@ export let multiplyMat4 = (a, b) => {
  * @param {{x?: number, y?: number, z?: number, rx?: number, ry?: number, rz?: number, sx?: number, sy?: number, sz?: number}} options x/y/z-translate, rx/ry/rz-rotate sx/sy/sz-scale
  */
 export let transform = (mat, options) => {
+  
   let out = new Float32Array(mat);
-  let x = options.x || 0,
-    y = options.y || 0,
-    z = options.z || 0;
-  let sx = options.sx || 1,
-    sy = options.sy || 1,
-    sz = options.sz || 1;
-  let rx = options.rx,
-    ry = options.ry,
-    rz = options.rz;
-
+  
+  let x = options.x || 0;
+  let y = options.y || 0;
+  let z = options.z || 0;
+  
+  let sx = options.sx || 1;
+  let sy = options.sy || 1;
+  let sz = options.sz || 1;
+  
+  let rx = options.rx;
+  let ry = options.ry;
+  let rz = options.rz;
+  
   // translate
-  if (x || y || z) {
-    out[12] += out[0] * x + out[4] * y + out[8] * z;
-    out[13] += out[1] * x + out[5] * y + out[9] * z;
+  if(x || y || z){
+    out[12] += out[0] * x + out[4] * y + out[8]  * z;
+    out[13] += out[1] * x + out[5] * y + out[9]  * z;
     out[14] += out[2] * x + out[6] * y + out[10] * z;
     out[15] += out[3] * x + out[7] * y + out[11] * z;
   }
-
+  
   // Rotate
-  if (rx) {
-    out.set(
-      multiplyMat4(
-        out,
-        new Float32Array([
-          1,
-          0,
-          0,
-          0,
-          0,
-          Math.cos(rx),
-          Math.sin(rx),
-          0,
-          0,
-          -Math.sin(rx),
-          Math.cos(rx),
-          0,
-          0,
-          0,
-          0,
-          1,
-        ])
-      )
-    );
-  }
-  if (ry) {
-    out.set(
-      multiplyMat4(
-        out,
-        new Float32Array([
-          Math.cos(ry),
-          0,
-          -Math.sin(ry),
-          0,
-          0,
-          1,
-          0,
-          0,
-          Math.sin(ry),
-          0,
-          Math.cos(ry),
-          0,
-          0,
-          0,
-          0,
-          1,
-        ])
-      )
-    );
-  }
-  if (rz) {
-    out.set(
-      multiplyMat4(
-        out,
-        new Float32Array([
-          Math.cos(rz),
-          Math.sin(rz),
-          0,
-          0,
-          -Math.sin(rz),
-          Math.cos(rz),
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-        ])
-      )
-    );
-  }
-
+  if(rx) out.set(multMat4Mat4(out, new Float32Array([1, 0, 0, 0, 0, Math.cos(rx), Math.sin(rx), 0, 0, -Math.sin(rx), Math.cos(rx), 0, 0, 0, 0, 1])));
+  if(ry) out.set(multMat4Mat4(out, new Float32Array([Math.cos(ry), 0, -Math.sin(ry), 0, 0, 1, 0, 0, Math.sin(ry), 0, Math.cos(ry), 0, 0, 0, 0, 1])));
+  if(rz) out.set(multMat4Mat4(out, new Float32Array([Math.cos(rz), Math.sin(rz), 0, 0, -Math.sin(rz), Math.cos(rz), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1])));
+  
   // Scale
-  if (sx !== 1) {
-    (out[0] *= sx), (out[1] *= sx), (out[2] *= sx), (out[3] *= sx);
+  if(sx !== 1){
+    out[0] *= sx;  
+    out[1] *= sx;
+    out[2] *= sx;
+    out[3] *= sx;
   }
-  if (sy !== 1) {
-    (out[4] *= sy), (out[5] *= sy), (out[6] *= sy), (out[7] *= sy);
+  if(sy !== 1){
+    out[4] *= sy;
+    out[5] *= sy;
+    out[6] *= sy;
+    out[7] *= sy;
   }
-  if (sz !== 1) {
-    (out[8] *= sz), (out[9] *= sz), (out[10] *= sz), (out[11] *= sz);
+  if(sz !== 1){
+    out[8] *= sz;
+    out[9] *= sz;
+    out[10] *= sz;
+    out[11] *= sz;
   }
-
+  
   return out;
 };
 
+
+// Create a matrix representing a rotation around an arbitrary axis [x, y, z]
+export let rotate = (axis, angle) => {
+
+  let x = axis[0], y = axis[1], z = axis[2];
+  let len = Math.hypot(x, y, z);
+  let s, c, t;
+  
+  if (len == 0) return null;
+
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
+
+  s = Math.sin(angle);
+  c = Math.cos(angle);
+  t = 1 - c;
+
+  return new Float32Array([
+    x * x * t + c,      y * x * t + z * s,  z * x * t - y * s,   0,
+    x * y * t - z * s,  y * y * t + c,      z * y * t + x * s,   0,
+    x * z * t + y * s,  y * z * t - x * s,  z * z * t + c,       0,
+    0, 0, 0, 1
+  ]);
+};
+
+// Apply a matrix transformation to a custom axis
+export let transformMat4 = (a, m) => {
+  let x = a[0],
+    y = a[1],
+    z = a[2];
+  let w = (m[3] * x + m[7] * y + m[11] * z + m[15])|| 1.0;
+  
+  return new Float32Array([
+    (m[0] * x + m[4] * y + m[8] * z + m[12]) / w,
+    (m[1] * x + m[5] * y + m[9] * z + m[13]) / w,
+    (m[2] * x + m[6] * y + m[10] * z + m[14]) / w
+  ]);
+}
+
+/**
+ * Transpose a matrix
+ *
+ * @param {Float32Array} m 4x4 Matrix
+ */
+export let transpose = m => {
+  return new Float32Array([
+    m[0], m[4], m[8],  m[12],
+    m[1], m[5], m[9],  m[13],
+    m[2], m[6], m[10], m[14],
+    m[3], m[7], m[11], m[15]
+  ]);
+};
+
+/**
+ * Get the inverse of a mat4
+ * The mat4 is not modified, a new mat4 is returned
+ *
+ * @param {Float32Array} m 4x4 Matrix
+ */
+export let inverseTranspose = m => transpose(inverse(m));
+
+// 
+// Optional: a "up" vector can be defined to tilt the camera on one side (vertical by default).  
 /**
  * Place a camera at the position [cameraX, cameraY, cameraZ], make it look at the point [targetX, targetY, targetZ].
  * Optional: a "up" vector can be defined to tilt the camera on one side (vertical by default).
  *
  * @param {Float32Array} mat 4x4 Matrix
- * @param {number} targetX Camera position x
- * @param {number} targetY Camera position y
- * @param {number} targetZ Camera position z
- * @param {number} cameraX Look at position x
- * @param {number} cameraY Look at position y
- * @param {number} cameraZ Look at position z
- * @param {number} upX Tilt camera in x
- * @param {number} upY Tilt camera in y
- * @param {number} upZ Tilt camera in z
+ * @param {number} cameraX Camera position x
+ * @param {number} cameraY Camera position y
+ * @param {number} cameraZ Camera position z
+ * @param {number} targetX Look at x
+ * @param {number} targetY Look at y
+ * @param {number} targetZ Look at z
+ * @param {number} upX Tilt camera in x-axis
+ * @param {number} upY Tilt camera in y-axis
+ * @param {number} upZ Tilt camera in z-axis
  */
-export let lookAt = (
-  mat,
-  {
-    cameraX,
-    cameraY,
-    cameraZ,
-    targetX,
-    targetY,
-    targetZ,
-    upX = 0,
-    upY = 1,
-    upZ = 0,
-  }
-) => {
-  var fx, fy, fz, rlf, sx, sy, sz, rls, ux, uy, uz;
+export let lookMatrix = (mat, cameraX, cameraY, cameraZ, targetX, targetY, targetZ, upX = 0, upY = 1, upZ = 0) => {
+  let fx, fy, fz, rlf, sx, sy, sz, rls, ux, uy, uz;
   fx = targetX - cameraX;
   fy = targetY - cameraY;
   fz = targetZ - cameraZ;
-  rlf = 1 / Math.sqrt(fx * fx + fy * fy + fz * fz);
+  rlf = 1 / Math.sqrt(fx*fx + fy*fy + fz*fz);
   fx *= rlf;
   fy *= rlf;
   fz *= rlf;
   sx = fy * upZ - fz * upY;
   sy = fz * upX - fx * upZ;
   sz = fx * upY - fy * upX;
-  rls = 1 / Math.sqrt(sx * sx + sy * sy + sz * sz);
+  rls = 1 / Math.sqrt(sx*sx + sy*sy + sz*sz);
   sx *= rls;
   sy *= rls;
   sz *= rls;
   ux = sy * fz - sz * fy;
   uy = sz * fx - sx * fz;
   uz = sx * fy - sy * fx;
-  var l = new Float32Array([
-    sx,
-    ux,
-    -fx,
-    0,
-    sy,
-    uy,
-    -fy,
-    0,
-    sz,
-    uz,
-    -fz,
-    0,
-    0,
-    0,
-    0,
-    1,
+  let l = new Float32Array([
+    sx, ux, -fx, 0,
+    sy, uy, -fy, 0,
+    sz, uz, -fz, 0,
+    0,  0,  0,   1
   ]);
-  l = transform(l, { x: -cameraX, y: -cameraY, z: -cameraZ });
-  return multiplyMat4(mat, l);
-};
+  l = transform(l, {x: -cameraX, y: -cameraY, z: -cameraZ});
+  return multMat4Mat4(mat, l); 
+}
+/**
+ * Create projection matrix
+ *
+ * @param {Float32Array} out Target 4x4 Matrix
+ * @param {number} fov Field of View
+ * @param {number} aspect aspect ratio
+ * @param {number} near near clip point
+ * @param {number} far far clip point
+ */

@@ -27,33 +27,29 @@ let program,
   vertexPos,
   modelView = identity();
 
-export let init = (gl, aspect) => {
+export let init = (gl) => {
   program = compile(gl, vshader, fshader);
+  vertexPos = gl.getAttribLocation(program, "aVertexPosition");
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
   projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
-  vertexPos = gl.getAttribLocation(program, "aVertexPosition");
 
   buffer = makeBuffer(gl, gl.ARRAY_BUFFER, [
-    -1.0,
-    1.0, // top left
-    -1.0,
-    -1.0, // bottom left
-    1.0,
-    1.0, // top right
-    1.0,
-    -1.0, // bottom right
+    0,
+    0, // top left
+    0,
+    500, // bottom left
+    500,
+    0, // top right
+    500,
+    500, // bottom right
   ]);
-  modelView = transform(modelView, { z: -2, sx: 2, sy: 2 });
+  modelView = transform(modelView, { z: 5 });
 
   // Initialize children nodes
   Player.init(gl);
-
-  // Initialize camera
-  Camera.init(aspect);
 };
 
 export let update = (delta) => {
-  Camera.update();
   // Update children nodes
   Player.update(delta);
 };
@@ -61,15 +57,15 @@ export let update = (delta) => {
 export let draw = (gl) => {
   gl.useProgram(program);
 
-  gl.uniformMatrix4fv(modelMatrixPos, false, modelView);
-  gl.uniformMatrix4fv(projectionMatrixPos, false, Camera.projection);
-
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vertexPos);
 
+  gl.uniformMatrix4fv(modelMatrixPos, false, modelView);
+  gl.uniformMatrix4fv(projectionMatrixPos, false, Camera.projectionMatrix);
+
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
   // Draw children nodes
-  Player.draw(gl, Camera.projection, modelView);
+  Player.draw(gl);
 };

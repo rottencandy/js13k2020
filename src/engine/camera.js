@@ -1,14 +1,11 @@
-import { identity, perspective, transform } from "./math";
-import { velocity, drift, rot } from "../player";
+import { identity, orthographic, multMat4Mat4 } from "./math";
 
-export let projection = identity();
-let FOV = (45 * Math.PI) / 180, // in radians
-  NEAR = 0.1,
-  FAR = 100.0;
-export let init = (aspect) => {
-  projection = perspective(projection, FOV, aspect, NEAR, FAR);
+export let projectionMatrix = identity();
+
+export let update = (width, height) => {
+  projectionMatrix = orthographic(0, width, height, 0, 100, -100);
 };
 
-export let update = (aspect) => {
-  projection = transform(projection, { y: -velocity });
+export let lookAt = (inverseMatrix) => {
+  projectionMatrix = multMat4Mat4(projectionMatrix, inverseMatrix);
 };
