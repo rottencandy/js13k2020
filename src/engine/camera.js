@@ -3,7 +3,7 @@ import { identity, orthographic, multMat4Mat4 } from "./math";
 export let projectionMatrix = identity();
 
 export let update = (width, height) => {
-  projectionMatrix = orthographic(0, width, height, 0, 100, -100);
+  projectionMatrix = orthographic(0, width, height, 0, 500, -500);
 };
 
 export let lookAt = (inverseMatrix) => {

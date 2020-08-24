@@ -6,6 +6,8 @@
   "scripts": {
     "prebuild": "mkdir -p app && cp assets/* app/",
     "build": "esbuild --bundle --minify --outdir=app src/main.js",
+    "predevbuild": "mkdir -p app && cp assets/* app/",
+    "devbuild": "esbuild --bundle --outdir=app src/main.js",
     "bundle": "./bundle.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,12 +1,10 @@
 body {
  margin: 0;
+ background: #030303;
 }
 canvas {
  position: absolute;
  top: 0;
  left: 0%;
  margin: auto;
-}
-#game {
- z-index: 1;
 }
