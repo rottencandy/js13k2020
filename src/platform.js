@@ -48,11 +48,32 @@ export let init = (gl) => {
   ]);
 };
 
-export let setupTiles = (width, height) => {
+export let decodeLevel = (levelData) => {
+  let [width, height, tiles] = levelData.split(":");
+  // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
+  (parsedTiles = []).length = width * height;
+  // TODO Not required?
+  parsedTiles.fill("0");
+  // to keep track of parsed tiles index
+  let curPos = 0;
+
+  for (let i = 0; i < tiles.length; i++) {
+    let val = tiles.charAt(i);
+
+    if (Number(val)) {
+      let count = Number(val);
+      parsedTiles.fill(tiles.charAt(++i), curPos, curPos + count);
+      curPos += count;
+    } else {
+      parsedTiles[curPos++] = val;
+    }
+  }
+
   platforms = [];
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       platforms.push({
+        type: parsedTiles[x + y * width],
         modelView: transform(identity(), {
           x: x * SIZE + GAP * x,
           y: y * SIZE + GAP * y,
@@ -60,6 +81,8 @@ export let setupTiles = (width, height) => {
       });
     }
   }
+  console.log(parsedTiles);
+  console.log(platforms);
 };
 
 export let load = (gl) => {
