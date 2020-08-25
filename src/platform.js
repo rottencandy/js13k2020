@@ -25,33 +25,38 @@ let program,
   projectionMatrixPos,
   buffer,
   vertexPos,
-  platforms = [],
-  GAP = 10,
-  SIZE = 50;
+  platforms = [];
+
+export let TILEGAP = 10,
+  TILESIZE = 50,
+  playerInitPos = [1, 1],
+  gridWidth,
+  gridHeight;
 
 export let init = (gl) => {
   program = compile(gl, vshader, fshader);
-  vertexPos = gl.getAttribLocation(program, "aVertexPosition");
-  modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
-  parentTransformPos = gl.getUniformLocation(program, "uParentTransform");
-  projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
 
   buffer = makeBuffer(gl, gl.ARRAY_BUFFER, [
     0,
     0, // top left
     0,
-    SIZE, // bottom left
-    SIZE,
+    TILESIZE, // bottom left
+    TILESIZE,
     0, // top right
-    SIZE,
-    SIZE, // bottom right
+    TILESIZE,
+    TILESIZE, // bottom right
   ]);
+
+  vertexPos = gl.getAttribLocation(program, "aVertexPosition");
+  modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
+  parentTransformPos = gl.getUniformLocation(program, "uParentTransform");
+  projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
 };
 
 export let decodeLevel = (levelData) => {
-  let [width, height, tiles] = levelData.split(":");
+  [gridWidth, gridHeight, tiles] = levelData.split(":");
   // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
-  (parsedTiles = []).length = width * height;
+  (parsedTiles = []).length = gridWidth * gridHeight;
   // TODO Not required?
   parsedTiles.fill("0");
   // to keep track of parsed tiles index
@@ -69,33 +74,30 @@ export let decodeLevel = (levelData) => {
     }
   }
 
-  platforms = [];
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
+  (platforms = []).length = gridWidth * gridHeight;
+  for (let y = 0; y < gridHeight; y++) {
+    for (let x = 0; x < gridWidth; x++) {
       platforms.push({
-        type: parsedTiles[x + y * width],
+        type: parsedTiles[x + y * gridWidth],
         modelView: transform(identity(), {
-          x: x * SIZE + GAP * x,
-          y: y * SIZE + GAP * y,
+          x: x * TILESIZE + TILEGAP * x,
+          y: y * TILESIZE + TILEGAP * y,
         }),
       });
     }
   }
-  console.log(parsedTiles);
-  console.log(platforms);
 };
 
-export let load = (gl) => {
+export let load = (gl, parentTransform) => {
   gl.useProgram(program);
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vertexPos);
-};
-
-export let draw = (gl, parentTransform) => {
   gl.uniformMatrix4fv(parentTransformPos, false, parentTransform);
   gl.uniformMatrix4fv(projectionMatrixPos, false, Camera.projectionMatrix);
+};
 
+export let draw = (gl) => {
   platforms.forEach((tile) => {
     gl.uniformMatrix4fv(modelMatrixPos, false, tile.modelView);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
