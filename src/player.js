@@ -37,7 +37,9 @@ let program,
   SIZE = 10,
   modelView = identity();
 
-export let playerX, playerY;
+export let playerX,
+  playerY,
+  state = 0;
 
 export let init = (gl) => {
   program = compile(gl, vshader, fshader);
@@ -57,41 +59,53 @@ export let init = (gl) => {
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
   parentTransformPos = gl.getUniformLocation(program, "uParentTransform");
   projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
-  // accomodate for GAP
-  // TODO this shoul ideally be done using platform size
-  modelView = transform(modelView, { x: 20, y: 20, z: -0.1 });
+
   [playerX, playerY] = playerInitPos;
+
+  modelView = transform(modelView, {
+    x: playerX * TILESIZE + TILEGAP * playerX,
+    y: playerY * TILESIZE + TILEGAP * playerY,
+    z: -0.1,
+  });
 };
 
-export let update = (delta) => {
-  if (Key.up) {
-    if (playerY > 0) {
-      playerY--;
+export let update = (_delta) => {
+  let moveX = 0,
+    moveY = 0;
+  // state = 0 : no key pressed, stationary
+  // state = 1 : key pressed, moving
+  if (Key.up || Key.down || Key.left || Key.right) {
+    if (state === 0) {
+      state = 1;
+      if (Key.up) {
+        if (playerY > 0) {
+          playerY--;
+          moveY--;
+        }
+      } else if (Key.down) {
+        if (playerY < gridHeight - 1) {
+          playerY++;
+          moveY++;
+        }
+      } else if (Key.left) {
+        if (playerX > 0) {
+          playerX--;
+          moveX--;
+        }
+      } else if (Key.right) {
+        if (playerX < gridWidth - 1) {
+          playerX++;
+          moveX++;
+        }
+      }
+
       modelView = transform(modelView, {
-        y: playerY * TILESIZE,
+        x: moveX * TILESIZE + TILEGAP * moveX,
+        y: moveY * TILESIZE + TILEGAP * moveY,
       });
     }
-  } else if (Key.down) {
-    if (playerY < gridHeight) {
-      playerY++;
-      modelView = transform(modelView, {
-        y: playerY * TILESIZE,
-      });
-    }
-  } else if (Key.left) {
-    if (playerX > 0) {
-      playerX--;
-      modelView = transform(modelView, {
-        y: playerX * TILESIZE,
-      });
-    }
-  } else if (Key.right) {
-    if (playerX < gridWidth) {
-      playerX++;
-      modelView = transform(modelView, {
-        y: playerX * TILESIZE,
-      });
-    }
+  } else {
+    state = 0;
   }
 };
 
