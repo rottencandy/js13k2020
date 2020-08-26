@@ -12,5 +12,12 @@ body {
 }
 #ui {
  position: absolute;
- visibility: hidden;
+ max-width: 800px;
+ max-height: 600px;
+}
+#t {
+ background: #fff;
+}
+#p {
+ background: #fff;
 }
