@@ -1,10 +1,16 @@
 body {
- margin: 0;
+ border: 0;
  background: #030303;
 }
-canvas {
- position: absolute;
- top: 0;
- left: 0%;
+.c {
+ left: 0;
+ right: 0;
  margin: auto;
+}
+#app {
+ position: absolute;
+}
+#ui {
+ position: absolute;
+ visibility: hidden;
 }

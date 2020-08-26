@@ -6,11 +6,6 @@ export let state = {
   score: 0,
 };
 
-// detect coil subscription
-//document.monetization.addEventListener('monetizationstart', function() {
-//  state.hasCoil = true;
-//});
-
 let gl;
 
 export let init = (canvas) => {
@@ -27,18 +22,8 @@ export let init = (canvas) => {
   gl.enable(gl.LEQUAL);
 };
 
-let resize = () => {
-  let width = gl.canvas.clientWidth;
-  let height = gl.canvas.clientHeight;
-  if (gl.canvas.width != width || gl.canvas.height != height) {
-    gl.canvas.width = width;
-    gl.canvas.height = height;
-    Camera.update(width, height);
-  }
-};
-
 export let update = (delta) => {
-  resize();
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   Scene.update(delta);
 };
 
