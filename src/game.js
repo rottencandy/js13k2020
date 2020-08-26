@@ -25,6 +25,7 @@ export let init = (canvas) => {
 export let update = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   Scene.update(delta);
+  return 1;
 };
 
 export let draw = () => {

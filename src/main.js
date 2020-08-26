@@ -1,8 +1,10 @@
 import { startLoop } from "./engine/loop.js";
+import { showUi } from "./ui";
 import * as game from "./game.js";
 
 let canvas = document.getElementById("app");
 
+// TODO find a way to pass this to ui
 let WIDTH = 800,
   HEIGHT = 600;
 
@@ -24,7 +26,11 @@ onresize = () => {
 };
 onresize();
 
-startLoop((delta) => {
-  game.update(delta);
-  game.draw();
-});
+let startGameLoop = () =>
+  startLoop((delta) => {
+    let next = game.update(delta);
+    game.draw();
+    return next;
+  });
+
+showUi(startGameLoop);
