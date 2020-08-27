@@ -2,13 +2,8 @@ import { compile, makeBuffer } from "./engine/gl";
 import { identity, transform } from "./engine/math";
 import { Key } from "./engine/input";
 import * as Camera from "./engine/camera";
-import {
-  gridWidth,
-  gridHeight,
-  TILESIZE,
-  TILEGAP,
-  playerInitPos,
-} from "./platform";
+import { gridWidth, gridHeight } from "./platform";
+import { TILESIZE, TILEGAP } from "./tile";
 
 // Vertex shader
 let vshader = `
@@ -37,9 +32,14 @@ let program,
   SIZE = 10,
   modelView = identity();
 
-export let playerX,
-  playerY,
+let playerX = 0,
+  playerY = 0,
   state = 0;
+
+export let initPos = (x, y) => {
+  playerX = x;
+  playerY = y;
+};
 
 export let init = (gl) => {
   program = compile(gl, vshader, fshader);
@@ -59,8 +59,6 @@ export let init = (gl) => {
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
   parentTransformPos = gl.getUniformLocation(program, "uParentTransform");
   projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
-
-  [playerX, playerY] = playerInitPos;
 
   modelView = transform(modelView, {
     x: playerX * TILESIZE + TILEGAP * playerX,

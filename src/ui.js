@@ -19,7 +19,7 @@ title.innerText = "A GAME";
 // Main play button
 let playButton = document.createElement("div");
 playButton.id = "p";
-playButton.innerText = "PLAY";
+playButton.innerText = "START";
 playButton.onclick = () => {
   base.style.visibility = "hidden";
   startLoop(gameLoop);

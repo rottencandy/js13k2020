@@ -6,6 +6,8 @@
   "scripts": {
     "prebuild": "mkdir -p app && cp assets/* app/",
     "build": "esbuild --bundle --minify --outdir=app src/main.js",
+    "preroll": "mkdir -p app && cp assets/* app/",
+    "roll": "rollup --config",
     "predevbuild": "mkdir -p app && cp assets/* app/",
     "devbuild": "esbuild --bundle --outdir=app src/main.js",
     "bundle": "./bundle.sh",

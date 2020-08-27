@@ -6,7 +6,7 @@ let transformMatrix = identity();
 export let init = (gl) => {
   Platform.init(gl);
   Player.init(gl);
-  Platform.decodeLevel("3:5:2a4b6c4d");
+  Platform.loadLevel("3:5:xa4b6c4d");
 };
 
 export let update = (delta) => {

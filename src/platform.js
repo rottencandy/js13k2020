@@ -1,6 +1,7 @@
 import { compile, makeBuffer } from "./engine/gl";
-import { identity, transform } from "./engine/math";
 import * as Camera from "./engine/camera";
+import * as Player from "./player";
+import { createTileData, TILESIZE } from "./tile";
 
 // Vertex shader
 let vshader = `
@@ -27,11 +28,7 @@ let program,
   vertexPos,
   platforms = [];
 
-export let TILEGAP = 10,
-  TILESIZE = 50,
-  playerInitPos = [1, 1],
-  gridWidth,
-  gridHeight;
+export let gridWidth, gridHeight;
 
 export let init = (gl) => {
   program = compile(gl, vshader, fshader);
@@ -53,16 +50,16 @@ export let init = (gl) => {
   projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
 };
 
-export let decodeLevel = (levelData) => {
+export let loadLevel = (levelData) => {
   [gridWidth, gridHeight, tiles] = levelData.split(":");
+  // Array for temporary storage of decoded string
   // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
   (parsedTiles = []).length = gridWidth * gridHeight;
   // TODO Not required?
   parsedTiles.fill("0");
-  // to keep track of parsed tiles index
-  let curPos = 0;
 
-  for (let i = 0; i < tiles.length; i++) {
+  // First, create array of decoded tile chars
+  for (let i = 0, curPos = 0; i < tiles.length; i++) {
     let val = tiles.charAt(i);
 
     if (Number(val)) {
@@ -74,16 +71,15 @@ export let decodeLevel = (levelData) => {
     }
   }
 
-  (platforms = []).length = gridWidth * gridHeight;
+  // Next, add position & detail metadata for each tile
+  (platforms = []).length = 0;
   for (let y = 0; y < gridHeight; y++) {
     for (let x = 0; x < gridWidth; x++) {
-      platforms.push({
-        type: parsedTiles[x + y * gridWidth],
-        modelView: transform(identity(), {
-          x: x * TILESIZE + TILEGAP * x,
-          y: y * TILESIZE + TILEGAP * y,
-        }),
-      });
+      let type = parsedTiles[x + y * gridWidth];
+
+      // TODO is this efficient? Only done once, so does it matter?
+      type === "x" && Player.initPos(x, y);
+      platforms.push(createTileData(x, y, type));
     }
   }
 };

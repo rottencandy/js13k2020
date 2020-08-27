@@ -3,7 +3,6 @@ import { initGame } from "./game.js";
 
 let canvas = document.getElementById("app");
 
-// TODO find a way to pass this to ui
 let WIDTH = 800,
   HEIGHT = 600;
 
