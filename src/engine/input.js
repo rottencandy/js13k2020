@@ -1,4 +1,4 @@
-export let Key = { up: false, right: false, down: false, left: false };
+export let Key = { up: false, right: false, down: false, left: false, esc: false };
 
 // Keydown listener
 onkeydown = (e) => {
@@ -21,6 +21,11 @@ onkeydown = (e) => {
   // Left (left / A / Q)
   if (keycode == 37 || keycode == 65 || keycode == 81) {
     Key.left = true;
+  }
+
+  // Esc
+  if (keycode = 27) {
+    Key.esc = true;
   }
 };
 
@@ -45,5 +50,10 @@ onkeyup = (e) => {
   // Left
   if (keycode == 37 || keycode == 65 || keycode == 81) {
     Key.left = false;
+  }
+
+  // Esc
+  if (keycode = 27) {
+    Key.esc = false;
   }
 };
