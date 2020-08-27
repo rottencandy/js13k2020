@@ -1,6 +1,7 @@
 body {
- border: 0;
- background: #030303;
+ font: 100 2.5em Trebuchet, sans-serif;
+ margin: 0;
+ background: #222;
 }
 .c {
  left: 0;
@@ -12,12 +13,14 @@ body {
 }
 #ui {
  position: absolute;
- max-width: 800px;
- max-height: 600px;
+ display: flex;
+ flex-direction: column;
+ height: 100%;
 }
 #t {
- background: #fff;
+ color: #ccc;
 }
 #p {
- background: #fff;
+ background: #ccc;
+ cursor: pointer;
 }

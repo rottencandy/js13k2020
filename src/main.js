@@ -1,6 +1,5 @@
-import { startLoop } from "./engine/loop.js";
 import { showUi } from "./ui";
-import * as game from "./game.js";
+import { initGame } from "./game.js";
 
 let canvas = document.getElementById("app");
 
@@ -12,7 +11,7 @@ let aspect = WIDTH / HEIGHT;
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
-game.init(canvas);
+initGame(canvas);
 
 onresize = () => {
   canvas.height = Math.min(
@@ -26,11 +25,4 @@ onresize = () => {
 };
 onresize();
 
-let startGameLoop = () =>
-  startLoop((delta) => {
-    let next = game.update(delta);
-    game.draw();
-    return next;
-  });
-
-showUi(startGameLoop);
+showUi();
