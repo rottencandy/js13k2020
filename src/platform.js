@@ -1,7 +1,7 @@
 import { compile, makeBuffer } from "./engine/gl";
 import * as Camera from "./engine/camera";
 import * as Player from "./player";
-import { createTileData, TILESIZE, drawTile } from "./tile";
+import { TILESIZE, createTileData, drawTile, checkTile } from "./tile";
 
 // Vertex shader
 let vshader = `
@@ -89,6 +89,8 @@ export let loadLevel = (levelData) => {
 
 export let update = (delta) => {
   Player.update(delta);
+
+  return checkTile(platforms[Player.playerX + gridWidth * Player.playerY]);
 };
 
 export let draw = (gl, parentTransform) => {

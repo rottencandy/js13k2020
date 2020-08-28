@@ -24,10 +24,10 @@ export let initGame = (canvas) => {
 
 export let gameLoop = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  Scene.update(delta);
+  let proceed = Scene.update(delta);
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   Scene.draw(gl);
 
-  return 1;
+  return proceed;
 };

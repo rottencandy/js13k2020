@@ -4,6 +4,7 @@ import { gameLoop } from "./game.js";
 let base = document.getElementById("ui");
 
 let setElements = (arr) => {
+  base.style.visibility = "visible";
   base.innerHTML = "";
   base.append(...arr);
 };
@@ -22,7 +23,7 @@ playButton.id = "p";
 playButton.innerText = "START";
 playButton.onclick = () => {
   base.style.visibility = "hidden";
-  startLoop(gameLoop);
+  startLoop(gameLoop, showUi);
 };
 
 export let showUi = () => {

@@ -4,7 +4,7 @@
  *
  * @param {(delta: number) => void} step update function
  */
-export let startLoop = (step) => {
+export let startLoop = (step, onEnd) => {
   let last = 0;
   let loop = function (now) {
     let dt = now - last;
@@ -14,8 +14,8 @@ export let startLoop = (step) => {
     if (dt > 500) {
       dt = 500;
     }
-    // Stop on falsey return
-    step(dt / 1000) && requestAnimationFrame(loop);
+    // Stop on falsey return and run callback
+    step(dt / 1000) ? requestAnimationFrame(loop) : onEnd();
   };
   requestAnimationFrame(loop);
 };

@@ -33,7 +33,7 @@ let program,
   SIZE = 10,
   modelView = identity();
 
-let playerX = 0,
+export let playerX = 0,
   playerY = 0,
   state = 0;
 

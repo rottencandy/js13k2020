@@ -8,7 +8,7 @@ export let init = (gl) => {
 };
 
 export let update = (delta) => {
-  Platform.update(delta);
+  return Platform.update(delta);
 };
 
 export let draw = (gl) => {
