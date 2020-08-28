@@ -1,22 +1,16 @@
 import * as Platform from "./platform";
-import * as Player from "./player";
 import { identity } from "./engine/math";
 
 let transformMatrix = identity();
 export let init = (gl) => {
   Platform.init(gl);
-  Player.init(gl);
-  Platform.loadLevel("3:5:xa4b6c4d");
+  Platform.loadLevel("3:5:ab4c6d4e");
 };
 
 export let update = (delta) => {
-  Player.update(delta);
+  Platform.update(delta);
 };
 
 export let draw = (gl) => {
-  Platform.load(gl, transformMatrix);
-  Platform.draw(gl);
-
-  Player.load(gl, transformMatrix);
-  Player.draw(gl);
+  Platform.draw(gl, transformMatrix);
 };

@@ -2,7 +2,6 @@ import { compile, makeBuffer } from "./engine/gl";
 import { identity, transform } from "./engine/math";
 import { Key } from "./engine/input";
 import * as Camera from "./engine/camera";
-import { gridWidth, gridHeight } from "./platform";
 import { TILESIZE, TILEGAP } from "./tile";
 
 // Vertex shader
@@ -29,6 +28,8 @@ let program,
   parentTransformPos,
   buffer,
   vertexPos,
+  gridWidth,
+  gridHeight,
   SIZE = 10,
   modelView = identity();
 
@@ -36,9 +37,11 @@ let playerX = 0,
   playerY = 0,
   state = 0;
 
-export let initPos = (x, y) => {
+export let initPos = (x, y, width, height) => {
   playerX = x;
   playerY = y;
+  gridWidth = width;
+  gridHeight = height;
 };
 
 export let init = (gl) => {

@@ -1,7 +1,7 @@
 import { compile, makeBuffer } from "./engine/gl";
 import * as Camera from "./engine/camera";
 import * as Player from "./player";
-import { createTileData, TILESIZE } from "./tile";
+import { createTileData, TILESIZE, drawTile } from "./tile";
 
 // Vertex shader
 let vshader = `
@@ -24,11 +24,12 @@ void main() {
 let program,
   modelMatrixPos,
   projectionMatrixPos,
+  parentTransformPos,
   buffer,
   vertexPos,
   platforms = [];
 
-export let gridWidth, gridHeight;
+let gridWidth, gridHeight;
 
 export let init = (gl) => {
   program = compile(gl, vshader, fshader);
@@ -48,6 +49,8 @@ export let init = (gl) => {
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
   parentTransformPos = gl.getUniformLocation(program, "uParentTransform");
   projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
+
+  Player.init(gl);
 };
 
 export let loadLevel = (levelData) => {
@@ -78,24 +81,27 @@ export let loadLevel = (levelData) => {
       let type = parsedTiles[x + y * gridWidth];
 
       // TODO is this efficient? Only done once, so does it matter?
-      type === "x" && Player.initPos(x, y);
+      type === "a" && Player.initPos(x, y, gridWidth, gridHeight);
       platforms.push(createTileData(x, y, type));
     }
   }
 };
 
-export let load = (gl, parentTransform) => {
+export let update = (delta) => {
+  Player.update(delta);
+};
+
+export let draw = (gl, parentTransform) => {
   gl.useProgram(program);
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vertexPos);
   gl.uniformMatrix4fv(parentTransformPos, false, parentTransform);
   gl.uniformMatrix4fv(projectionMatrixPos, false, Camera.projectionMatrix);
-};
 
-export let draw = (gl) => {
-  platforms.forEach((tile) => {
-    gl.uniformMatrix4fv(modelMatrixPos, false, tile.modelView);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-  });
+  platforms.forEach((tile) => drawTile(gl, tile, modelMatrixPos));
+
+  Player.load(gl, parentTransform);
+
+  Player.draw(gl);
 };

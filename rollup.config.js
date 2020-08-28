@@ -9,6 +9,8 @@ export default {
   plugins: [
     terser({
       warnings: false,
+      compress: { ecma: 2016, passes: 1, unsafe_arrows: true },
+      mangle: { module: true, toplevel: true },
     }),
   ],
 };
