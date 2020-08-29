@@ -21,7 +21,12 @@ body {
  color: #ccc;
  background: #222;
 }
-#p {
+#b {
  background: #ccc;
  cursor: pointer;
+}
+#l {
+ background: #ccc;
+ cursor: pointer;
+ padding-top: 5px;
 }

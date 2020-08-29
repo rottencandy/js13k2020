@@ -1,5 +1,7 @@
 import { startLoop } from "./engine/loop.js";
-import { gameLoop } from "./game.js";
+import { gameLoop, gameState, editorLoop } from "./game";
+import { loadLevel } from "./scene";
+import { levels } from "./levels";
 
 let base = document.getElementById("ui");
 
@@ -9,23 +11,66 @@ let setElements = (arr) => {
   base.append(...arr);
 };
 
-// Define all UI elements here
-// ------------------------------
+let hideUI = () => (base.style.visibility = "hidden");
+
+let textElement = (text) => {
+  let ele = document.createElement("div");
+  ele.id = "t";
+  ele.innerText = text;
+  return ele;
+};
+
+let buttonElement = (text, callback) => {
+  let ele = document.createElement("div");
+  ele.id = "b";
+  ele.innerText = text;
+  ele.onclick = callback;
+  return ele;
+};
 
 // Title text
-let title = document.createElement("div");
-title.id = "t";
-title.innerText = "A GAME";
+let title = textElement("A GAME");
 
-// Main play button
-let playButton = document.createElement("div");
-playButton.id = "p";
-playButton.innerText = "START";
-playButton.onclick = () => {
-  base.style.visibility = "hidden";
-  startLoop(gameLoop, showUi);
-};
+let levelButtons = levels.map((level, i) => {
+  let ele = document.createElement("div");
+  ele.id = "l";
+  ele.innerText = i + 1;
+  ele.onclick = () => {
+    gameState.level = i;
+    hideUI();
+    loadLevel(level);
+    startLoop(gameLoop, () =>
+      gameState.state ? showWinMenu() : showLoseMenu()
+    );
+  };
+  return ele;
+});
 
-export let showUi = () => {
-  setElements([title, playButton]);
-};
+let levelEditorButton = buttonElement("CREATE LEVELS", () => {
+  gameState.level = i;
+  hideUI();
+  startLoop(editorLoop, () => {});
+});
+
+// Main start button
+let playButton = buttonElement("START", () => {
+  showLevels();
+});
+
+// Success title text
+let successText = textElement("COMPLETED");
+
+// Fail title text
+let failText = textElement("TRY AGAIN");
+
+export let showMainMenu = () =>
+  setElements([title, playButton, levelEditorButton]);
+
+// Back button
+let homeButton = buttonElement("MAIN MENU", showMainMenu);
+
+let showLevels = () => setElements([...levelButtons, homeButton]);
+
+let showWinMenu = () => setElements([successText, homeButton]);
+
+let showLoseMenu = () => setElements([failText, playButton, homeButton]);
