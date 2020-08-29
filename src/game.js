@@ -1,9 +1,12 @@
 import * as Camera from "./engine/camera";
 import * as Scene from "./scene";
-export let state = {
+import * as Editor from "./editor.js";
+
+export let gameState = {
   hasCoil: false,
-  lives: 0,
-  score: 0,
+  // 0: failed, 1: playing, 2: completed
+  state: 0,
+  level: 0,
 };
 
 let gl;
@@ -24,10 +27,18 @@ export let initGame = (canvas) => {
 
 export let gameLoop = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  let proceed = Scene.update(delta);
+  gameState.state = Scene.update(delta);
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   Scene.draw(gl);
+
+  return gameState.state === 2 ? 0 : gameState.state;
+};
+
+export let editorLoop = (delta) => {
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  let proceed = Editor.update(delta);
+  Editor.draw(gl);
 
   return proceed;
 };

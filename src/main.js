@@ -1,4 +1,4 @@
-import { showUi } from "./ui";
+import { showMainMenu } from "./ui";
 import { initGame } from "./game.js";
 
 let canvas = document.getElementById("app");
@@ -12,6 +12,7 @@ canvas.height = HEIGHT;
 
 initGame(canvas);
 
+// Maintain aspect ratio
 onresize = () => {
   canvas.height = Math.min(
     innerHeight,
@@ -24,4 +25,4 @@ onresize = () => {
 };
 onresize();
 
-showUi();
+showMainMenu();
