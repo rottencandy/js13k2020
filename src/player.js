@@ -29,7 +29,6 @@ let program,
   buffer,
   vertexPos,
   gridWidth,
-  gridHeight,
   SIZE = 10,
   modelView = identity();
 
@@ -37,11 +36,16 @@ export let playerX = 0,
   playerY = 0,
   state = 0;
 
-export let initPos = (x, y, width, height) => {
+export let initPos = (x, y, width) => {
   playerX = x;
   playerY = y;
   gridWidth = width;
-  gridHeight = height;
+
+  modelView = transform(identity(), {
+    x: playerX * TILESIZE + TILEGAP * playerX,
+    y: playerY * TILESIZE + TILEGAP * playerY,
+    z: -0.1,
+  });
 };
 
 export let init = (gl) => {
@@ -62,12 +66,6 @@ export let init = (gl) => {
   modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
   parentTransformPos = gl.getUniformLocation(program, "uParentTransform");
   projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
-
-  modelView = transform(modelView, {
-    x: playerX * TILESIZE + TILEGAP * playerX,
-    y: playerY * TILESIZE + TILEGAP * playerY,
-    z: -0.1,
-  });
 };
 
 export let update = (_delta) => {
@@ -84,7 +82,7 @@ export let update = (_delta) => {
           moveY--;
         }
       } else if (Key.down) {
-        if (playerY < gridHeight - 1) {
+        if (playerY < gridWidth - 1) {
           playerY++;
           moveY++;
         }
