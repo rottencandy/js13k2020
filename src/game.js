@@ -11,6 +11,8 @@ export let gameState = {
 
 let gl;
 
+let clearScreen = () => gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 export let initGame = (canvas) => {
   gl = canvas.getContext("webgl", { antialias: false });
 
@@ -29,7 +31,7 @@ export let gameLoop = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gameState.state = Scene.update(delta);
 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  clearScreen();
   Scene.draw(gl);
 
   return gameState.state === 2 ? 0 : gameState.state;
@@ -38,6 +40,8 @@ export let gameLoop = (delta) => {
 export let editorLoop = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   let proceed = Editor.update(delta);
+
+  clearScreen();
   Editor.draw(gl);
 
   return proceed;

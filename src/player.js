@@ -2,7 +2,7 @@ import { compile, makeBuffer } from "./engine/gl";
 import { identity, transform } from "./engine/math";
 import { Key } from "./engine/input";
 import * as Camera from "./engine/camera";
-import { TILESIZE, TILEGAP } from "./tile";
+import { TILEWIDTH, TILEGAP } from "./tile";
 
 // Vertex shader
 let vshader = `
@@ -22,12 +22,7 @@ void main() {
   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }`;
 
-let program,
-  modelMatrixPos,
-  projectionMatrixPos,
-  parentTransformPos,
-  buffer,
-  vertexPos,
+let buffer,
   gridWidth,
   SIZE = 10,
   modelView = identity();
@@ -42,8 +37,8 @@ export let initPos = (x, y, width) => {
   gridWidth = width;
 
   modelView = transform(identity(), {
-    x: playerX * TILESIZE + TILEGAP * playerX,
-    y: playerY * TILESIZE + TILEGAP * playerY,
+    x: playerX * TILEWIDTH + TILEGAP * playerX,
+    y: playerY * TILEWIDTH + TILEGAP * playerY,
     z: -0.1,
   });
 };
@@ -61,11 +56,6 @@ export let init = (gl) => {
     SIZE,
     SIZE, // bottom right
   ]);
-
-  vertexPos = gl.getAttribLocation(program, "aVertexPosition");
-  modelMatrixPos = gl.getUniformLocation(program, "uModelViewMatrix");
-  parentTransformPos = gl.getUniformLocation(program, "uParentTransform");
-  projectionMatrixPos = gl.getUniformLocation(program, "uProjectionMatrix");
 };
 
 export let update = (_delta) => {
@@ -98,9 +88,9 @@ export let update = (_delta) => {
         }
       }
 
-      modelView = transform(modelView, {
-        x: moveX * TILESIZE + TILEGAP * moveX,
-        y: moveY * TILESIZE + TILEGAP * moveY,
+      transform(modelView, {
+        x: moveX * TILEWIDTH + TILEGAP * moveX,
+        y: moveY * TILEWIDTH + TILEGAP * moveY,
       });
     }
   } else {
@@ -109,15 +99,19 @@ export let update = (_delta) => {
 };
 
 export let load = (gl, parentTransform) => {
-  gl.useProgram(program);
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(vertexPos);
-  gl.uniformMatrix4fv(parentTransformPos, false, parentTransform);
-  gl.uniformMatrix4fv(projectionMatrixPos, false, Camera.projectionMatrix);
+  program.use();
+  buffer.bind();
+  gl.vertexAttribPointer(program.attribs.vertex, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(program.attribs.vertex);
+  gl.uniformMatrix4fv(program.uniforms.parentTransform, false, parentTransform);
+  gl.uniformMatrix4fv(
+    program.uniforms.projectionMatrix,
+    false,
+    Camera.projectionMatrix
+  );
 };
 
 export let draw = (gl) => {
-  gl.uniformMatrix4fv(modelMatrixPos, false, modelView);
+  gl.uniformMatrix4fv(program.uniforms.modelMatrix, false, modelView);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
