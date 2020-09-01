@@ -20,13 +20,21 @@ body {
 #t {
  color: #ccc;
  background: #222;
+ margin: 2em auto;
 }
 #b {
  background: #ccc;
  cursor: pointer;
+ margin: 1em auto;
+}
+#g {
+ display: grid;
+ grid-gap: 50px;
+ grid-template-rows: auto;
+ grid-template-columns: auto;
 }
 #l {
  background: #ccc;
  cursor: pointer;
- padding-top: 5px;
+ text-align: center;
 }

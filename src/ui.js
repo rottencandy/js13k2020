@@ -31,22 +31,26 @@ let buttonElement = (text, callback) => {
 // Title text
 let title = textElement("A GAME");
 
-let levelButtons = levels.map((level, i) => {
-  let ele = document.createElement("div");
-  ele.id = "l";
-  ele.innerText = i + 1;
-  ele.onclick = () => {
-    gameState.level = i;
-    hideUI();
-    loadLevel(level);
-    startLoop(gameLoop, () =>
-      gameState.state ? showWinMenu() : showLoseMenu()
-    );
-  };
-  return ele;
-});
+let levelButtons = document.createElement("div");
+levelButtons.id = "g";
+levelButtons.append(
+  ...levels.map((level, i) => {
+    let ele = document.createElement("div");
+    ele.id = "l";
+    ele.innerText = i + 1;
+    ele.onclick = () => {
+      gameState.level = i;
+      hideUI();
+      loadLevel(level);
+      startLoop(gameLoop, () =>
+        gameState.state ? showWinMenu() : showLoseMenu()
+      );
+    };
+    return ele;
+  })
+);
 
-let levelEditorButton = buttonElement("CREATE LEVELS", () => {
+let levelEditorButton = buttonElement("CUSTOM LEVELS", () => {
   gameState.level = i;
   hideUI();
   startLoop(editorLoop, () => {});
@@ -69,7 +73,7 @@ export let showMainMenu = () =>
 // Back button
 let homeButton = buttonElement("MAIN MENU", showMainMenu);
 
-let showLevels = () => setElements([...levelButtons, homeButton]);
+let showLevels = () => setElements([levelButtons, homeButton]);
 
 let showWinMenu = () => setElements([successText, homeButton]);
 
