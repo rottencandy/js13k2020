@@ -80,18 +80,17 @@ export let camLookAt = (cameraPosition, target, up) => {
  */
 export let multMat4Mat4 = (a, b) => {
   let i, ai0, ai1, ai2, ai3;
-  let c = new Float32Array(16);
   for (i = 0; i < 4; i++) {
     ai0 = a[i];
     ai1 = a[i+4];
     ai2 = a[i+8];
     ai3 = a[i+12];
-    c[i]    = ai0 * b[0]  + ai1 * b[1]  + ai2 * b[2]  + ai3 * b[3];
-    c[i+4]  = ai0 * b[4]  + ai1 * b[5]  + ai2 * b[6]  + ai3 * b[7];
-    c[i+8]  = ai0 * b[8]  + ai1 * b[9]  + ai2 * b[10] + ai3 * b[11];
-    c[i+12] = ai0 * b[12] + ai1 * b[13] + ai2 * b[14] + ai3 * b[15];
+    a[i]    = ai0 * b[0]  + ai1 * b[1]  + ai2 * b[2]  + ai3 * b[3];
+    a[i+4]  = ai0 * b[4]  + ai1 * b[5]  + ai2 * b[6]  + ai3 * b[7];
+    a[i+8]  = ai0 * b[8]  + ai1 * b[9]  + ai2 * b[10] + ai3 * b[11];
+    a[i+12] = ai0 * b[12] + ai1 * b[13] + ai2 * b[14] + ai3 * b[15];
   }
-  return c;
+  return a;
 };
 
 /**
@@ -102,8 +101,6 @@ export let multMat4Mat4 = (a, b) => {
  * @param {{x?: number, y?: number, z?: number, rx?: number, ry?: number, rz?: number, sx?: number, sy?: number, sz?: number}} options x/y/z-translate, rx/ry/rz-rotate sx/sy/sz-scale
  */
 export let transform = (mat, options) => {
-  
-  let out = new Float32Array(mat);
   
   let x = options.x || 0;
   let y = options.y || 0;
@@ -119,38 +116,38 @@ export let transform = (mat, options) => {
   
   // translate
   if(x || y || z){
-    out[12] += out[0] * x + out[4] * y + out[8]  * z;
-    out[13] += out[1] * x + out[5] * y + out[9]  * z;
-    out[14] += out[2] * x + out[6] * y + out[10] * z;
-    out[15] += out[3] * x + out[7] * y + out[11] * z;
+    mat[12] += mat[0] * x + mat[4] * y + mat[8]  * z;
+    mat[13] += mat[1] * x + mat[5] * y + mat[9]  * z;
+    mat[14] += mat[2] * x + mat[6] * y + mat[10] * z;
+    mat[15] += mat[3] * x + mat[7] * y + mat[11] * z;
   }
   
   // Rotate
-  if(rx) out.set(multMat4Mat4(out, new Float32Array([1, 0, 0, 0, 0, Math.cos(rx), Math.sin(rx), 0, 0, -Math.sin(rx), Math.cos(rx), 0, 0, 0, 0, 1])));
-  if(ry) out.set(multMat4Mat4(out, new Float32Array([Math.cos(ry), 0, -Math.sin(ry), 0, 0, 1, 0, 0, Math.sin(ry), 0, Math.cos(ry), 0, 0, 0, 0, 1])));
-  if(rz) out.set(multMat4Mat4(out, new Float32Array([Math.cos(rz), Math.sin(rz), 0, 0, -Math.sin(rz), Math.cos(rz), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1])));
+  if(rx) multMat4Mat4(mat, new Float32Array([1, 0, 0, 0, 0, Math.cos(rx), Math.sin(rx), 0, 0, -Math.sin(rx), Math.cos(rx), 0, 0, 0, 0, 1]));
+  if(ry) multMat4Mat4(mat, new Float32Array([Math.cos(ry), 0, -Math.sin(ry), 0, 0, 1, 0, 0, Math.sin(ry), 0, Math.cos(ry), 0, 0, 0, 0, 1]));
+  if(rz) multMat4Mat4(mat, new Float32Array([Math.cos(rz), Math.sin(rz), 0, 0, -Math.sin(rz), Math.cos(rz), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]));
   
   // Scale
   if(sx !== 1){
-    out[0] *= sx;  
-    out[1] *= sx;
-    out[2] *= sx;
-    out[3] *= sx;
+    mat[0] *= sx;  
+    mat[1] *= sx;
+    mat[2] *= sx;
+    mat[3] *= sx;
   }
   if(sy !== 1){
-    out[4] *= sy;
-    out[5] *= sy;
-    out[6] *= sy;
-    out[7] *= sy;
+    mat[4] *= sy;
+    mat[5] *= sy;
+    mat[6] *= sy;
+    mat[7] *= sy;
   }
   if(sz !== 1){
-    out[8] *= sz;
-    out[9] *= sz;
-    out[10] *= sz;
-    out[11] *= sz;
+    mat[8] *= sz;
+    mat[9] *= sz;
+    mat[10] *= sz;
+    mat[11] *= sz;
   }
   
-  return out;
+  return mat;
 };
 
 
@@ -258,7 +255,7 @@ export let lookMatrix = (mat, cameraX, cameraY, cameraZ, targetX, targetY, targe
     sz, uz, -fz, 0,
     0,  0,  0,   1
   ]);
-  l = transform(l, {x: -cameraX, y: -cameraY, z: -cameraZ});
+  transform(l, {x: -cameraX, y: -cameraY, z: -cameraZ});
   return multMat4Mat4(mat, l); 
 }
 /**
