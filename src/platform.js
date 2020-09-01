@@ -3,8 +3,8 @@ import * as Tile from "./tile";
 import { transform, identity, degToRad } from "./engine/math";
 
 let gridWidth,
-  parentTransform = identity();
-
+  parentTransform = identity(),
+  state = 0;
 export let platforms = [];
 
 export let init = (gl) => {
@@ -12,15 +12,43 @@ export let init = (gl) => {
   Player.init(gl);
 };
 
+export let update = (delta) => {
+  switch (state) {
+    // Enter scene
+    case 0:
+      platforms.forEach((tile, i) => {
+        Tile.setEnterPos(tile, i);
+      });
+      if (platforms[0].zpos === 0) state = 1;
+      return 1;
+    // Play scene
+    case 1:
+      Player.update(delta);
+
+      return Tile.checkTile(
+        platforms[Player.playerX + gridWidth * Player.playerY]
+      );
+  }
+};
+
+export let draw = (gl) => {
+  Tile.loadTileBuffer(gl, parentTransform);
+  platforms.forEach((tile) => Tile.drawTile(gl, tile));
+
+  Player.load(gl, parentTransform);
+
+  Player.draw(gl);
+};
+
 export let loadLevel = (levelData) => {
   [gridWidth, tiles] = levelData.split(":");
+  state = 0;
 
   parentTransform = transform(identity(), {
-    y: gridWidth * Tile.TILESIZE,
+    y: gridWidth * Tile.TILEWIDTH,
+    rx: -degToRad(30),
     rz: -Math.PI / 4,
-    rx: degToRad(30),
   });
-  // Array for temporary storage of decoded string
   // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
   (parsedTiles = []).length = gridWidth * 2;
   // First, create array of decoded tile chars
@@ -35,7 +63,7 @@ export let loadLevel = (levelData) => {
       parsedTiles[curPos++] = val;
     }
   }
-  // Next, add position & detail metadata for each tile
+  // Next, fill platform wih position & detail metadata for each tile
   (platforms = []).length = 0;
   for (let y = 0; y < gridWidth; y++) {
     for (let x = 0; x < gridWidth; x++) {
@@ -46,19 +74,4 @@ export let loadLevel = (levelData) => {
       platforms.push(Tile.createTileData(x, y, type));
     }
   }
-};
-
-export let update = (delta) => {
-  Player.update(delta);
-
-  return Tile.checkTile(platforms[Player.playerX + gridWidth * Player.playerY]);
-};
-
-export let draw = (gl) => {
-  Tile.loadTileBuffer(gl, parentTransform);
-  platforms.forEach((tile) => Tile.drawTile(gl, tile));
-
-  Player.load(gl, parentTransform);
-
-  Player.draw(gl);
 };
