@@ -11,6 +11,7 @@ export let TILEGAP = 10,
 let program;
 
 // Vertex shader
+// TODO: light direction(normal) is hardcoded for now
 let vshader = `attribute vec4 aVertexPosition;
 attribute vec3 aNormal;
 
@@ -24,18 +25,18 @@ varying float vDepth;
 void main() {
   gl_Position = uProjectionMatrix * uParentTransform * uModelViewMatrix * aVertexPosition;
   vNormal = aNormal;
-  vDepth = 1.0-aVertexPosition.z/100.0;
+  vDepth = aVertexPosition.z/100.0;
 }`;
 
 // Fragment shader
-// light direction is hardcoded for now
+// TODO: lazily calculated fog, will look ugly when backdrop changes
 let fshader = `precision mediump float;
 varying vec3 vNormal;
 varying float vDepth;
 
 void main() {
   float light = dot(normalize(vNormal), vec3(-0.5, 0.8, -1.0));
-  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  gl_FragColor = mix(vec4(1.0, 0.0, 0.0, 1.0), vec4(0.8, 0.8, 0.8, 1.0), vDepth);
   gl_FragColor.xyz *= light;
 }`;
 
