@@ -18,6 +18,7 @@ export let compile = (gl, vshader, fshader) => {
   gl.attachShader(program, fs);
   gl.linkProgram(program);
 
+  // TODO: comment these lines
   console.log("vertex shader:", gl.getShaderInfoLog(vs) || "OK");
   console.log("fragment shader:", gl.getShaderInfoLog(fs) || "OK");
   console.log("program:", gl.getProgramInfoLog(program) || "OK");
@@ -33,6 +34,7 @@ export let compile = (gl, vshader, fshader) => {
       modelMatrix: gl.getUniformLocation(program, "uModelViewMatrix"),
       parentTransform: gl.getUniformLocation(program, "uParentTransform"),
       projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix"),
+      lightDir: gl.getUniformLocation(program, "uLightDir"),
     },
   };
 };

@@ -1,6 +1,7 @@
 import * as Player from "./player";
 import * as Tile from "./tile";
 import { transform, identity, degToRad } from "./engine/math";
+import { getCanvasSize } from "./game";
 
 let gridWidth,
   parentTransform = identity(),
@@ -25,9 +26,7 @@ export let update = (delta) => {
     case 1:
       Player.update(delta);
 
-      return Tile.checkTile(
-        platforms[Player.playerX + gridWidth * Player.playerY]
-      );
+      return Tile.checkTile(platforms[Player.X + gridWidth * Player.Y]);
   }
 };
 
@@ -36,7 +35,6 @@ export let draw = (gl) => {
   platforms.forEach((tile) => Tile.drawTile(gl, tile));
 
   Player.load(gl, parentTransform);
-
   Player.draw(gl);
 };
 
@@ -44,11 +42,15 @@ export let loadLevel = (levelData) => {
   [gridWidth, tiles] = levelData.split(":");
   state = 0;
 
-  parentTransform = transform(identity(), {
-    y: gridWidth * Tile.TILEWIDTH,
-    rx: -degToRad(30),
-    rz: -Math.PI / 4,
-  });
+  {
+    let [width, height] = getCanvasSize();
+    parentTransform = transform(identity(), {
+      y: width / 2,
+      x: height / 2,
+      rx: -degToRad(30),
+      rz: -Math.PI / 4,
+    });
+  }
   // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
   (parsedTiles = []).length = gridWidth * 2;
   // First, create array of decoded tile chars
@@ -70,7 +72,7 @@ export let loadLevel = (levelData) => {
       let type = parsedTiles[x + y * gridWidth];
 
       // TODO is this efficient? Only done once, so does it matter?
-      type === "a" && Player.initPos(x, y, gridWidth);
+      type === "a" && Player.initPos(x, y);
       platforms.push(Tile.createTileData(x, y, type));
     }
   }
