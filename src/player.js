@@ -45,6 +45,7 @@ let buffer,
   SPEED = 0.1,
   targetPos = [0, 0],
   activePos = [0, 0],
+  Z = 0,
   modelView = identity();
 
 export let X = 0,
@@ -61,6 +62,7 @@ export let init = (gl) => {
 export let update = (_delta) => {
   // state = 0 : no key pressed, stationary, taking input
   // state = 1 : key pressed, moving, not taking input
+  // state = 1 : end session
   switch (state) {
     case 0:
       if (Key.up || Key.down || Key.left || Key.right) {
@@ -75,6 +77,7 @@ export let update = (_delta) => {
           targetPos[0]++;
         }
       }
+      break;
     case 1:
       let xDisp = 0,
         yDisp = 0;
@@ -105,8 +108,20 @@ export let update = (_delta) => {
         x: xDisp * (TILEWIDTH + TILEGAP),
         y: yDisp * (TILEWIDTH + TILEGAP),
       });
+      break;
+    // FALL DOWNNN
+    case 2:
+      transform(modelView, {
+        z: Z++,
+      });
+      // done falling
+      if (Z > 50) {
+        return 1;
+      }
   }
 };
+
+export let fall = () => (state = 2);
 
 export let load = (gl, parentTransform) => {
   program.use();
@@ -136,7 +151,7 @@ export let draw = (gl) => {
 export let initPos = (x, y) => {
   X = targetPos[0] = activePos[0] = x;
   Y = targetPos[1] = activePos[1] = y;
-  state = 0;
+  state = Z = 0;
 
   modelView = transform(identity(), {
     x: X * TILEWIDTH + TILEGAP * X,

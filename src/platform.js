@@ -20,13 +20,28 @@ export let update = (delta) => {
       platforms.forEach((tile, i) => {
         Tile.setEnterPos(tile, i);
       });
+      // Check if the last tile has been moved to position
       if (platforms[0].zpos === 0) state = 1;
       return 1;
     // Play scene
     case 1:
       Player.update(delta);
+      // Check bounds
+      if (
+        Player.X < 0 ||
+        Player.Y < 0 ||
+        Player.X >= gridWidth ||
+        Player.Y >= gridWidth
+      ) {
+        Player.fall();
+        state = 2;
+        return 1;
+      }
 
       return Tile.checkTile(platforms[Player.X + gridWidth * Player.Y]);
+    // End scene
+    case 2:
+      return Player.update() ? 0 : 1;
   }
 };
 
