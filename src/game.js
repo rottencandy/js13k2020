@@ -27,6 +27,8 @@ export let initGame = (canvas) => {
   gl.enable(gl.LEQUAL);
 };
 
+export let getCanvasSize = () => [gl.canvas.width, gl.canvas.height];
+
 export let gameLoop = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gameState.state = Scene.update(delta);
