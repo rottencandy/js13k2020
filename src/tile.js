@@ -2,10 +2,11 @@ import { compile, makeBuffer } from "./engine/gl";
 import * as Camera from "./engine/camera";
 import { identity, transform } from "./engine/math";
 import { partialCube, partialCubeNormal } from "./shapes";
+import { lightDirection } from "./palette";
 
 export let TILEGAP = 10,
   TILEWIDTH = 50,
-  TILEHEIGHT = 100,
+  TILEHEIGHT = 500,
   STARTZPOS = 1000;
 
 let program;
@@ -25,17 +26,19 @@ varying float vDepth;
 void main() {
   gl_Position = uProjectionMatrix * uParentTransform * uModelViewMatrix * aVertexPosition;
   vNormal = aNormal;
-  vDepth = aVertexPosition.z/100.0;
+  vDepth = aVertexPosition.z/500.0;
 }`;
 
 // Fragment shader
 // TODO: lazily calculated fog, will look ugly when backdrop changes
 let fshader = `precision mediump float;
+uniform vec3 uLightDir;
+
 varying vec3 vNormal;
 varying float vDepth;
 
 void main() {
-  float light = dot(normalize(vNormal), vec3(-0.5, 0.8, -1.0));
+  float light = dot(normalize(vNormal), uLightDir);
   gl_FragColor = mix(vec4(1.0, 0.0, 0.0, 1.0), vec4(0.8, 0.8, 0.8, 1.0), vDepth);
   gl_FragColor.xyz *= light;
 }`;
@@ -107,6 +110,7 @@ export let loadTileBuffer = (gl, parentTransform) => {
     false,
     Camera.projectionMatrix
   );
+  gl.uniform3fv(program.uniforms.lightDir, lightDirection);
 };
 
 export let drawTile = (gl, tile) => {
