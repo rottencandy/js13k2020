@@ -96,13 +96,8 @@ export let checkTile = (tile) => {
 export let loadTileBuffer = (gl, parentTransform) => {
   program.use();
 
-  vertexBuffer.bind();
-  gl.vertexAttribPointer(program.attribs.vertex, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(program.attribs.vertex);
-
-  normalBuffer.bind();
-  gl.vertexAttribPointer(program.attribs.normal, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(program.attribs.normal);
+  vertexBuffer.bind(3, program.attribs.vertex);
+  normalBuffer.bind(3, program.attribs.normal);
 
   gl.uniformMatrix4fv(program.uniforms.parentTransform, false, parentTransform);
   gl.uniformMatrix4fv(

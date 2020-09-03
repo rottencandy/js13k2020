@@ -25,8 +25,6 @@ export let init = (gl) => {
 export let draw = (gl) => {
   program.use();
 
-  vertexBuffer.bind();
-  gl.vertexAttribPointer(program.attribs.vertex, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(program.attribs.vertex);
+  vertexBuffer.bind(2, program.attribs.vertex);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };

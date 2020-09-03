@@ -51,6 +51,10 @@ export let makeBuffer = (gl, type, data) => {
   gl.bindBuffer(type, buffer);
   gl.bufferData(type, new Float32Array(data), gl.STATIC_DRAW);
   return {
-    bind: () => gl.bindBuffer(type, buffer),
+    bind: (size, pointer) => {
+      gl.bindBuffer(type, buffer);
+      gl.vertexAttribPointer(pointer, size, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(pointer);
+    },
   };
 };
