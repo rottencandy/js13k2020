@@ -41,11 +41,19 @@ export let update = (delta) => {
         state = 2;
         return 1;
       }
-
-      return Tile.checkTile(platforms[Player.X + gridWidth * Player.Y]);
-    // End scene
+      let effect = Tile.checkTile(platforms[Player.X + gridWidth * Player.Y]);
+      if (effect === 2) {
+        Player.fall();
+        state = 2;
+        return 1;
+      }
+    // Wait for animation
     case 2:
-      return Player.update() ? 0 : 1;
+      if (Player.update()) {
+        Player.initPos(initPos[0], initPos[1]);
+        state = 1;
+      }
+      return 1;
   }
 };
 

@@ -81,16 +81,17 @@ export let setEnterPos = (tile, index) => {
 };
 
 export let checkTile = (tile) => {
-  // Lose
-  if (tile.type === "c") {
-    return 0;
+  switch (tile.type) {
+    // Win
+    case "b":
+      return 1;
+    // Fall
+    case "c":
+      return 2;
+    // Continue
+    default:
+      return 0;
   }
-  // Win
-  if (tile.type === "b") {
-    return 2;
-  }
-  // Continue
-  return 1;
 };
 
 export let loadTileBuffer = (gl, parentTransform) => {
