@@ -5,7 +5,8 @@ import { getCanvasSize } from "./game";
 
 let gridWidth,
   parentTransform = identity(),
-  state = 0;
+  state = 0,
+  initPos = [0, 0];
 export let platforms = [];
 
 export let init = (gl) => {
@@ -21,7 +22,10 @@ export let update = (delta) => {
         Tile.setEnterPos(tile, i);
       });
       // Check if the last tile has been moved to position
-      if (platforms[0].zpos === 0) state = 1;
+      if (platforms[0].zpos === 0) {
+        state = 1;
+        Player.initPos(initPos[0], initPos[1]);
+      }
       return 1;
     // Play scene
     case 1:
@@ -54,6 +58,7 @@ export let draw = (gl) => {
 };
 
 export let loadLevel = (levelData) => {
+  Player.initPos(-10, -10);
   [gridWidth, tiles] = levelData.split(":");
   state = 0;
 
@@ -87,7 +92,10 @@ export let loadLevel = (levelData) => {
       let type = parsedTiles[x + y * gridWidth];
 
       // TODO is this efficient? Only done once, so does it matter?
-      type === "a" && Player.initPos(x, y);
+      if (type === "a") {
+        initPos[0] = x;
+        initPos[1] = y;
+      }
       platforms.push(Tile.createTileData(x, y, type));
     }
   }

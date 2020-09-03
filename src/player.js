@@ -60,13 +60,25 @@ export let init = (gl) => {
 };
 
 export let update = (_delta) => {
-  // state = 0 : no key pressed, stationary, taking input
-  // state = 1 : key pressed, moving, not taking input
-  // state = 1 : end session
+  // state = 0 : initialize and run start animation
+  // state = 1 : no key pressed, stationary, taking input
+  // state = 2 : key pressed, moving, not taking input
+  // state = 3 : end session
   switch (state) {
     case 0:
-      if (Key.up || Key.down || Key.left || Key.right) {
+      transform(modelView, {
+        z: -1,
+      });
+      Z--;
+      if (Z <= -HEIGHT) {
         state = 1;
+        Z = 0;
+      }
+      break;
+
+    case 1:
+      if (Key.up || Key.down || Key.left || Key.right) {
+        state = 2;
         if (Key.up) {
           targetPos[1]--;
         } else if (Key.down) {
@@ -78,7 +90,8 @@ export let update = (_delta) => {
         }
       }
       break;
-    case 1:
+
+    case 2:
       let xDisp = 0,
         yDisp = 0;
 
@@ -101,7 +114,7 @@ export let update = (_delta) => {
       } else {
         X = targetPos[0];
         Y = targetPos[1];
-        state = 0;
+        state = 1;
       }
 
       transform(modelView, {
@@ -109,8 +122,8 @@ export let update = (_delta) => {
         y: yDisp * (TILEWIDTH + TILEGAP),
       });
       break;
-    // FALL DOWNNN
-    case 2:
+
+    case 3:
       transform(modelView, {
         z: Z++,
       });
@@ -121,18 +134,13 @@ export let update = (_delta) => {
   }
 };
 
-export let fall = () => (state = 2);
+export let fall = () => (state = 3);
 
 export let load = (gl, parentTransform) => {
   program.use();
 
-  buffer.bind();
-  gl.vertexAttribPointer(program.attribs.vertex, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(program.attribs.vertex);
-
-  normalBuffer.bind();
-  gl.vertexAttribPointer(program.attribs.normal, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(program.attribs.normal);
+  buffer.bind(3, program.attribs.vertex);
+  normalBuffer.bind(3, program.attribs.normal);
 
   gl.uniformMatrix4fv(program.uniforms.parentTransform, false, parentTransform);
   gl.uniformMatrix4fv(
@@ -156,6 +164,6 @@ export let initPos = (x, y) => {
   modelView = transform(identity(), {
     x: X * TILEWIDTH + TILEGAP * X,
     y: Y * TILEWIDTH + TILEGAP * Y,
-    z: -HEIGHT,
+    z: 0,
   });
 };
