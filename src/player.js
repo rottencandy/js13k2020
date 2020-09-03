@@ -63,7 +63,8 @@ export let update = (_delta) => {
   // state = 0 : initialize and run start animation
   // state = 1 : no key pressed, stationary, taking input
   // state = 2 : key pressed, moving, not taking input
-  // state = 3 : end session
+  // state = 3 : end animation
+  // state = 4 : dummy state to wait for end of key press
   switch (state) {
     case 0:
       transform(modelView, {
@@ -71,7 +72,7 @@ export let update = (_delta) => {
       });
       Z--;
       if (Z <= -HEIGHT) {
-        state = 1;
+        state = 4;
         Z = 0;
       }
       break;
@@ -114,7 +115,7 @@ export let update = (_delta) => {
       } else {
         X = targetPos[0];
         Y = targetPos[1];
-        state = 1;
+        state = 4;
       }
 
       transform(modelView, {
@@ -129,7 +130,14 @@ export let update = (_delta) => {
       });
       // done falling
       if (Z > 50) {
+        Z = 0;
         return 1;
+      }
+      break;
+
+    case 4:
+      if (!(Key.up || Key.down || Key.left || Key.right)) {
+        state = 1;
       }
   }
 };
