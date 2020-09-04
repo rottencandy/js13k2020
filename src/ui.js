@@ -13,68 +13,75 @@ let setElements = (arr) => {
 
 let hideUI = () => (base.style.visibility = "hidden");
 
-let textElement = (text) => {
+let textElement = (text, id) => {
   let ele = document.createElement("div");
-  ele.id = "t";
+  ele.id = id;
+  ele.className = "fadein";
   ele.innerText = text;
   return ele;
 };
 
 let buttonElement = (text, callback) => {
   let ele = document.createElement("div");
-  ele.id = "b";
+  ele.id = "button";
+  ele.className = "fadein";
   ele.innerText = text;
   ele.onclick = callback;
   return ele;
 };
 
-// Title text
-let title = textElement("A GAME");
+export let showMainMenu = () => {
+  let wrapper = document.createElement("div");
+  let exitZoom = () => {
+    wrapper.className += " zoomin";
+  };
 
-let levelButtons = document.createElement("div");
-levelButtons.id = "g";
-levelButtons.append(
-  ...levels.map((level, i) => {
-    let ele = document.createElement("div");
-    ele.id = "l";
-    ele.innerText = i + 1;
-    ele.onclick = () => {
-      gameState.level = i;
-      hideUI();
-      loadLevel(level);
-      startLoop(gameLoop, () =>
-        gameState.state ? showWinMenu() : showLoseMenu()
-      );
-    };
-    return ele;
-  })
-);
+  // Title text
+  let title = textElement("A GAME", "title");
 
-let levelEditorButton = buttonElement("CUSTOM LEVELS", () => {
-  gameState.level = i;
-  hideUI();
-  startLoop(editorLoop, () => {});
-});
+  // Main start button
+  let startButton = buttonElement("START", () => {
+    exitZoom();
+    setTimeout(showLevelsMenu, 500);
+  });
 
-// Main start button
-let playButton = buttonElement("START", () => {
-  showLevels();
-});
+  // Custom levels button
+  let levelEditorButton = buttonElement("CUSTOM LEVELS", () => {
+    gameState.level = i;
+    hideUI();
+    startLoop(editorLoop, () => {});
+  });
 
-// Success title text
-let successText = textElement("COMPLETED");
+  wrapper.id = "mainmenu";
+  wrapper.className = "centered";
+  wrapper.append(title, startButton, levelEditorButton);
+  setElements([wrapper]);
+};
 
-// Fail title text
-let failText = textElement("TRY AGAIN");
+let backButton = buttonElement("<", () => {});
 
-export let showMainMenu = () =>
-  setElements([title, playButton, levelEditorButton]);
+let showLevelsMenu = () => {
+  // Levels
+  let levelsGrid = document.createElement("div");
+  levelsGrid.id = "levelsgrid";
+  levelsGrid.className = "centered fadein";
+  levelsGrid.append(
+    ...levels.map((level, i) => {
+      let ele = document.createElement("div");
+      ele.id = "level";
+      ele.innerText = i + 1;
+      ele.onclick = () => {
+        gameState.level = i;
+        levelsGrid.className += " fadeout";
+        loadLevel(level);
+        setTimeout(() => {
+          hideUI();
+          startLoop(gameLoop, () => {});
+        }, 500);
+      };
+      return ele;
+    })
+  );
 
-// Back button
-let homeButton = buttonElement("MAIN MENU", showMainMenu);
-
-let showLevels = () => setElements([levelButtons, homeButton]);
-
-let showWinMenu = () => setElements([successText, homeButton]);
-
-let showLoseMenu = () => setElements([failText, playButton, homeButton]);
+  setElements([backButton, levelsGrid]);
+};

@@ -6,7 +6,7 @@ import { lightDirection } from "./palette";
 
 export let TILEGAP = 10,
   TILEWIDTH = 50,
-  TILEHEIGHT = 500,
+  TILEHEIGHT = 600,
   STARTZPOS = 1000;
 
 let program;
