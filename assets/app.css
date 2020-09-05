@@ -3,7 +3,6 @@ body{font:100 2.5em Trebuchet,sans-serif;
  margin:0;
  background:radial-gradient(#999, #777);
  color:#222;
- overflow: hidden;
 }
 .centered{
  position:absolute;
@@ -34,27 +33,31 @@ body{font:100 2.5em Trebuchet,sans-serif;
  background:#222;
  margin:2em auto;
 }
-#button{
+#button,#backbutton{
  background:#ccc;
  cursor:pointer;
  margin:1em auto;
  padding:10px;
  transition:0.3s;
 }
-#button:hover,#level:hover{
+#button:hover,#level:hover,#backbutton:hover{
  background:#333;
  color:#6fc;
  transform:scale(1.1);
 }
-#button:active,#level:active{
+#button:active,#level:active,#backbutton:active{
  color:#ecf;
  transform:scale(0.9);
 }
+#backbutton{
+ padding:0 20px;
+ margin-left:0;
+ grid-column:1/5;
+}
 #levelsgrid{
- padding:1em;
  max-width:13em;
  display:grid;
- grid-gap:30px;
+ grid-gap:10px;
  grid-template-columns:repeat(4,1fr);
 }
 #level{
@@ -66,8 +69,9 @@ body{font:100 2.5em Trebuchet,sans-serif;
  transition:0.3s;
 }
 
-.fadein{animation:1s ease fadein}
-.fadeout{animation:1s ease 0s 2 reverse fadein}
+.fadein{animation:0.7s ease fadein}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
+.fadeout{animation:0.9s ease fadeout}
+@keyframes fadeout{to{opacity:0}}
 .zoomin{animation:1s ease zoomin}
-@keyframes zoomin{to{transform:scale(2);opacity:0}}
+@keyframes zoomin{to{transform:scale(3);opacity:0}}
