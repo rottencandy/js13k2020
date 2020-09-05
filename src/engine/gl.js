@@ -35,6 +35,7 @@ export let compile = (gl, vshader, fshader) => {
       parentTransform: gl.getUniformLocation(program, "uParentTransform"),
       projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix"),
       lightDir: gl.getUniformLocation(program, "uLightDir"),
+      jump: gl.getUniformLocation(program, "uJump"),
     },
   };
 };

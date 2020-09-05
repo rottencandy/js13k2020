@@ -25,17 +25,18 @@ void main() {
 }`;
 
 // Fragment shader
-// TODO: light direction(normal) is hardcoded for now
-// TODO: lazily calculated fog, will look ugly when backdrop changes
+// TODO: hardcoded glow value
 let fshader = `precision mediump float;
 uniform vec3 uLightDir;
+uniform float uJump;
 
 varying vec3 vNormal;
 varying float vHeight;
 
 void main() {
   float light = dot(normalize(vNormal), uLightDir);
-  gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+  float glow = step(vHeight, uJump);
+  gl_FragColor = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(1.,1.,1.,1.), glow);
   gl_FragColor.xyz *= light;
 }`;
 
@@ -46,6 +47,7 @@ let buffer,
   targetPos = [0, 0],
   activePos = [0, 0],
   Z = 0,
+  jump = 0,
   modelView = identity();
 
 export let X = 0,
@@ -79,15 +81,20 @@ export let update = (_delta) => {
 
     case 1:
       if (Key.up || Key.down || Key.left || Key.right) {
+        let stride = 1;
+        if (jump++ > 2) {
+          stride = 2;
+          jump = 0;
+        }
         state = 2;
         if (Key.up) {
-          targetPos[1]--;
+          targetPos[1] -= stride;
         } else if (Key.down) {
-          targetPos[1]++;
+          targetPos[1] += stride;
         } else if (Key.left) {
-          targetPos[0]--;
+          targetPos[0] -= stride;
         } else if (Key.right) {
-          targetPos[0]++;
+          targetPos[0] += stride;
         }
       }
       break;
@@ -157,6 +164,7 @@ export let load = (gl, parentTransform) => {
     Camera.projectionMatrix
   );
   gl.uniform3fv(program.uniforms.lightDir, lightDirection);
+  gl.uniform1f(program.uniforms.jump, jump / 3);
 };
 
 export let draw = (gl) => {
