@@ -52,6 +52,35 @@ export let showMainMenu = () => {
   wrapper.append(title, startButton, levelEditorButton);
   setElements([wrapper]);
 };
+let startOrResume = () => {
+  hideUI();
+  startLoop(gameLoop, () => {
+    if (!gameState.state) {
+      showLevelsMenu();
+    } else {
+      showPauseMenu();
+    }
+  });
+};
+
+let showPauseMenu = () => {
+  let wrapper = document.createElement("div");
+  wrapper.id = "pausemenu";
+  wrapper.className = "centered fadein";
+  let fadeOut = () => (wrapper.className = "centered fadeout");
+
+  let title = textElement("PAUSED", "title");
+  let resumeButton = buttonElement("RESUME", "button", () => {
+    fadeOut();
+    setTimeout(startOrResume, 500);
+  });
+  let mainMenuButton = buttonElement("MAIN MENU", "button", () => {
+    fadeOut();
+    setTimeout(showMainMenu, 500);
+  });
+  wrapper.append(title, resumeButton, mainMenuButton);
+  setElements([wrapper]);
+};
 
 let showLevelsMenu = () => {
   // Levels
@@ -75,10 +104,7 @@ let showLevelsMenu = () => {
         gameState.level = i;
         fadeout();
         loadLevel(level);
-        setTimeout(() => {
-          hideUI();
-          startLoop(gameLoop, () => {});
-        }, 500);
+        setTimeout(startOrResume, 500);
       };
       return ele;
     })
