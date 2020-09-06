@@ -76,11 +76,14 @@ canvas.onmousedown = (e) => {
 };
 canvas.onmouseup = () => {
   Key.mouse.down = false;
-  x = y = 0;
+  Key.mouse.x = Key.mouse.y = 0;
 };
 canvas.onmousemove = (e) => {
+  Key.mouse.x = Key.mouse.y = 0;
   if (Key.mouse.down) {
     Key.mouse.x = e.offsetX - x;
     Key.mouse.y = e.offsetY - y;
+    x = e.offsetX;
+    y = e.offsetY;
   }
 };
