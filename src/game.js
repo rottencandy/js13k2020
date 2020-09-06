@@ -7,8 +7,9 @@ import * as Editor from "./editor.js";
  * 0 = not playing
  * 1 = playing
  * 2 = paused
+ * 3 = in level editor
  *
- * @property {0 | 1 | 2} state - game state
+ * @property {0 | 1 | 2 | 3} state - game state
  * @property {number} level currently played level
  */
 export let gameState = {
@@ -25,6 +26,7 @@ export let initGame = (canvas) => {
 
   Camera.update(gl.canvas.width, gl.canvas.height);
   Scene.init(gl);
+  Editor.init(gl);
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   gl.clearColor(0.1, 0.1, 0.1, 1.0);
@@ -48,10 +50,10 @@ export let gameLoop = (delta) => {
 
 export let editorLoop = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  let proceed = Editor.update(delta);
+  gameState.state = Editor.update(delta);
 
   clearScreen();
   Editor.draw(gl);
 
-  return proceed;
+  return gameState.state === 3;
 };

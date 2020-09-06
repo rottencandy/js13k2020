@@ -54,14 +54,14 @@ export let init = (gl) => {
   normalBuffer = makeBuffer(gl, gl.ARRAY_BUFFER, partialCubeNormal());
 };
 
-export let createTileData = (x, y, type) => {
+export let createTileData = (x, y, type, startAtZero = false) => {
   return {
     type,
     zpos: STARTZPOS,
     modelView: transform(identity(), {
       x: x * TILEWIDTH + TILEGAP * x,
       y: y * TILEWIDTH + TILEGAP * y,
-      z: STARTZPOS,
+      z: startAtZero ? 0 : STARTZPOS,
     }),
   };
 };
