@@ -1,4 +1,11 @@
-export let Key = { up: false, right: false, down: false, left: false, esc: false };
+export let Key = {
+  up: false,
+  right: false,
+  down: false,
+  left: false,
+  esc: false,
+  mouse: { down: false, x: 0, y: 0 },
+};
 
 // Keydown listener
 onkeydown = (e) => {
@@ -55,5 +62,25 @@ onkeyup = (e) => {
   // Esc
   if (keycode == 27) {
     Key.esc = false;
+  }
+};
+
+// For handling mouse drag events
+let canvas = document.getElementById("app"),
+  x = 0,
+  y = 0;
+canvas.onmousedown = (e) => {
+  Key.mouse.down = true;
+  x = e.offsetX;
+  y = e.offsetY;
+};
+canvas.onmouseup = () => {
+  Key.mouse.down = false;
+  x = y = 0;
+};
+canvas.onmousemove = (e) => {
+  if (Key.mouse.down) {
+    Key.mouse.x = e.offsetX - x;
+    Key.mouse.y = e.offsetY - y;
   }
 };
