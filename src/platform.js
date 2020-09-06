@@ -39,14 +39,13 @@ export let update = (delta) => {
       ) {
         Player.fall();
         state = 2;
-        return 1;
-      }
-      let effect = Tile.checkTile(platforms[Player.X + gridWidth * Player.Y]);
-      if (effect === 2) {
+      } else if (
+        Tile.checkTile(platforms[Player.X + gridWidth * Player.Y]) === 2
+      ) {
         Player.fall();
         state = 2;
-        return 1;
       }
+      return 1;
     // Wait for animation
     case 2:
       if (Player.update()) {

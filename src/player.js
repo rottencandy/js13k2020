@@ -149,7 +149,7 @@ export let update = (_delta) => {
   }
 };
 
-export let fall = () => (state = 3);
+export let fall = () => ((state = 3), (jump = 0));
 
 export let load = (gl, parentTransform) => {
   program.use();

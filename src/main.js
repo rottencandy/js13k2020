@@ -16,11 +16,11 @@ initGame(canvas);
 onresize = () => {
   canvas.height = Math.min(
     innerHeight,
-    innerWidth < WIDTH ? Math.floor((innerWidth * 1) / aspect) : HEIGHT
+    innerWidth < WIDTH ? Math.floor(innerWidth / aspect) : HEIGHT
   );
   canvas.width = Math.min(
     innerWidth,
-    innerHeight < HEIGHT ? Math.floor(innerHeight * 1 * aspect) : WIDTH
+    innerHeight < HEIGHT ? Math.floor(innerHeight * aspect) : WIDTH
   );
 };
 onresize();

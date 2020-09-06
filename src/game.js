@@ -2,9 +2,16 @@ import * as Camera from "./engine/camera";
 import * as Scene from "./scene";
 import * as Editor from "./editor.js";
 
+/**
+ * Global game state
+ * 0 = not playing
+ * 1 = playing
+ * 2 = paused
+ *
+ * @property {0 | 1 | 2} state - game state
+ * @property {number} level currently played level
+ */
 export let gameState = {
-  hasCoil: false,
-  // 0: failed, 1: playing, 2: completed
   state: 0,
   level: 0,
 };
@@ -36,7 +43,7 @@ export let gameLoop = (delta) => {
   clearScreen();
   Scene.draw(gl);
 
-  return gameState.state === 2 ? 0 : gameState.state;
+  return gameState.state === 1;
 };
 
 export let editorLoop = (delta) => {

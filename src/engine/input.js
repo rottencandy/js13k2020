@@ -24,7 +24,7 @@ onkeydown = (e) => {
   }
 
   // Esc
-  if (keycode = 27) {
+  if (keycode == 27) {
     Key.esc = true;
   }
 };
@@ -53,7 +53,7 @@ onkeyup = (e) => {
   }
 
   // Esc
-  if (keycode = 27) {
+  if (keycode == 27) {
     Key.esc = false;
   }
 };
