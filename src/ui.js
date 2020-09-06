@@ -1,19 +1,36 @@
 import { startLoop } from "./engine/loop.js";
 import { gameLoop, gameState, editorLoop, getCanvasSize } from "./game";
-import { loadLevel } from "./scene";
+import { loadLevel, pauseScene } from "./scene";
 import { levels } from "./levels";
 import * as Editor from "./editor.js";
 
 let base = document.getElementById("ui"),
-  CENTERED_FADEIN = "centered fadein";
+  hud = document.getElementById("hud"),
+  // helpful constants
+  CENTERED_FADEIN = "centered fadein",
+  CENTERED_FADEOUT = "centered fadeout",
+  VISIBLE = "visible",
+  HIDDEN = "hidden";
 
-let setElements = (arr) => {
-  base.style.visibility = "visible";
+let setUIElement = (ele) => {
+  base.style.visibility = VISIBLE;
+  hud.style.visibility = HIDDEN;
   base.innerHTML = "";
-  base.append(...arr);
+  base.append(ele);
 };
 
-let hideUI = () => (base.style.visibility = "hidden");
+let hideUI = (isGame) => {
+  base.style.visibility = HIDDEN;
+  hud.style.visibility = VISIBLE;
+  let pauseButton = buttonElement("II", "pausebutton", () => {
+    hud.style.visibility = HIDDEN;
+    isGame ? pauseScene() : Editor.pauseEditor();
+    // paused through UI
+    showPauseMenu(isGame);
+  });
+  hud.innerHTML = "";
+  hud.append(pauseButton);
+};
 
 let textElement = (text, id) => {
   let ele = document.createElement("div");
@@ -52,49 +69,51 @@ export let showMainMenu = () => {
   });
 
   wrapper.append(title, startButton, customLevelsButton);
-  setElements([wrapper]);
+  setUIElement(wrapper);
 };
-let startOrResume = () => {
-  hideUI();
-  startLoop(gameLoop, () => {
+
+let startOrResumeGame = (isGame) => {
+  hideUI(isGame);
+  startLoop(isGame ? gameLoop : editorLoop, () => {
     if (!gameState.state) {
-      showLevelsMenu();
+      showMainMenu();
     } else {
-      showPauseMenu();
+      // paused through esc button
+      showPauseMenu(isGame);
     }
   });
 };
 
-let showPauseMenu = () => {
+let showPauseMenu = (isGame) => {
   let wrapper = document.createElement("div");
   wrapper.id = "pausemenu";
   wrapper.className = CENTERED_FADEIN;
-  let fadeOut = () => (wrapper.className = "centered fadeout");
+  let fadeOut = () => (wrapper.className = CENTERED_FADEOUT);
 
   let title = textElement("PAUSED", "title");
   let resumeButton = buttonElement("RESUME", "button", () => {
     fadeOut();
-    setTimeout(startOrResume, 500);
+    setTimeout(startOrResumeGame, 500, isGame);
   });
   let mainMenuButton = buttonElement("MAIN MENU", "button", () => {
     fadeOut();
     setTimeout(showMainMenu, 500);
   });
   wrapper.append(title, resumeButton, mainMenuButton);
-  setElements([wrapper]);
+  setUIElement(wrapper);
 };
 
 let showLevelsMenu = () => {
   let wrapper = document.createElement("div");
   wrapper.id = "mainmenu";
   wrapper.className = CENTERED_FADEIN;
-  let fadeOut = () => (wrapper.className = "centered fadeout");
+  let fadeOut = () => (wrapper.className = CENTERED_FADEOUT);
 
   let backButton = buttonElement("←", "backbutton", () => {
     fadeOut();
     setTimeout(showMainMenu, 600);
   });
-  let title = textElement("CUSTOM LEVELS", "subtitle");
+  let title = textElement("SELECT LEVEL", "subtitle");
 
   let levelsGrid = document.createElement("div");
   levelsGrid.id = "levelsgrid";
@@ -108,23 +127,23 @@ let showLevelsMenu = () => {
       ele.innerText = i + 1;
       ele.onclick = () => {
         gameState.level = i;
-        fadeout();
+        fadeOut();
         loadLevel(level);
-        setTimeout(startOrResume, 500);
+        setTimeout(startOrResumeGame, 500, true);
       };
       return ele;
     })
   );
   wrapper.append(backButton, title, levelsGrid);
 
-  setElements([wrapper]);
+  setUIElement(wrapper);
 };
 
 let showCustomLevelsMenu = () => {
   let wrapper = document.createElement("div");
   wrapper.id = "mainmenu";
   wrapper.className = CENTERED_FADEIN;
-  let fadeOut = () => (wrapper.className = "centered fadeout");
+  let fadeOut = () => (wrapper.className = CENTERED_FADEOUT);
 
   let title = textElement("CUSTOM LEVELS", "subtitle");
 
@@ -138,13 +157,9 @@ let showCustomLevelsMenu = () => {
   });
   let editorButton = buttonElement("CREATE LEVEL", "button", () => {
     fadeOut();
-    gameState.level = 3;
     Editor.reset(...getCanvasSize());
-    setTimeout(() => {
-      hideUI();
-      startLoop(editorLoop, () => {});
-    }, 500);
+    setTimeout(startOrResumeGame, 500, false);
   });
   wrapper.append(backButton, title, customLevelButton, editorButton);
-  setElements([wrapper]);
+  setUIElement(wrapper);
 };
