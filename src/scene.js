@@ -9,11 +9,11 @@ export let init = (gl) => {
 
 export let loadLevel = Platform.loadLevel;
 
-export let update = (delta) => {
+export let update = () => {
   if (Key.esc) {
     return 2;
   }
-  return Platform.update(delta);
+  return Platform.update();
 };
 
 export let draw = (gl) => {

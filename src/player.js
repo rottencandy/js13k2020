@@ -64,7 +64,7 @@ export let init = (gl) => {
 export let update = (_delta) => {
   // state = 0 : initialize and run start animation
   // state = 1 : no key pressed, stationary, taking input
-  // state = 2 : key pressed, moving, not taking input
+  // state = 2 : input registered, moving, not taking input
   // state = 3 : end animation
   // state = 4 : dummy state to wait for end of key press
   switch (state) {
