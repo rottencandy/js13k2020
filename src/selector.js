@@ -5,8 +5,8 @@ import { compile, makeBuffer } from "./engine/gl";
 import { TILEWIDTH, TILEGAP } from "./tile";
 
 export let X = 0,
-  Y = 0;
-let modelView = identity(),
+  Y = 0,
+  modelView = identity(),
   state = 0,
   SPEED = 0.1,
   pos = [0, 0],
@@ -21,6 +21,7 @@ export let reset = () => {
   X = 0;
   Y = 0;
   pos = [0, 0];
+  nextPos = [0, 0];
 };
 
 export let setContextPos = (x, y) => {

@@ -1,6 +1,7 @@
 import * as Backdrop from "./backdrop";
 import { identity, transform, degToRad } from "./engine/math";
 import { Key } from "./engine/input";
+import * as Camera from "./engine/camera";
 import * as Selector from "./selector";
 import { createTileData, loadTileBuffer, drawTile } from "./tile";
 
@@ -8,8 +9,10 @@ let gridWidth = 1,
   parentTransform = identity(),
   platforms = [],
   tileData = [],
+  pauseNextIteration = false,
   // These two keep track of the number of negative(outside of grid) steps we've taken
   // So we could update tileData grid properly
+  // parts of code using these are very delicate and subtle!
   negativeX = 1,
   negativeY = 1;
 
@@ -21,6 +24,7 @@ export let reset = (width, height) => {
     rx: -degToRad(30),
     rz: -Math.PI / 4,
   });
+  negativeX = negativeY = gridWidth = 1;
   Selector.reset();
   platforms = [["a"]];
   tileData = [[createTileData(0, 0, "a", true)]];
@@ -57,12 +61,17 @@ let newTileRowDown = () => {
   return newRow;
 };
 
+// used to pause through UI
+export let pauseEditor = () => (pauseNextIteration = true);
+
 export let update = () => {
-  if (Key.esc) {
+  if (Key.esc || pauseNextIteration) {
+    pauseNextIteration = false;
     return 2;
   }
   Selector.update();
 
+  // The hairy bit
   if (
     Selector.X < 0 ||
     Selector.Y < 0 ||
@@ -133,6 +142,10 @@ export let update = () => {
 
     // grid dimensions are now increased
     gridWidth++;
+  }
+  if (Key.mouse.down) {
+    Camera.move(Key.mouse.x, Key.mouse.y);
+    Key.mouse.x = Key.mouse.y = 0;
   }
 
   return 3;
