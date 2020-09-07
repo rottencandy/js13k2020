@@ -44,22 +44,37 @@ let setUIElement = (ele) => {
 let hideUI = (isGame) => {
   base.style.visibility = HIDDEN;
   hud.style.visibility = VISIBLE;
+  fadeOut = () => (hud.style.visibility = HIDDEN);
   let pauseButton = buttonElement("II", "pausebutton", () => {
-    hud.style.visibility = HIDDEN;
+    fadeOut();
     isGame ? pauseScene() : Editor.pauseEditor();
-    // no need to run pause here because it's picked up by startOrResumeGame
+    // no need to run pause here because it's handled by startOrResumeGame
   });
   let editComplete = buttonElement("✓", "pausebutton", () => {
-    hud.style.visibility = HIDDEN;
+    fadeOut();
     Editor.pauseEditor();
     gameState.editedLevel = true;
   });
   let resetButton = buttonElement("↺", "pausebutton", () =>
     Editor.reset(...getCanvasSize())
   );
+  let upperHud = document.createElement("div");
+  upperHud.id = "hudmenu";
+  upperHud.append(pauseButton);
+  isGame || upperHud.append(editComplete, resetButton);
+
+  // touch controls
+  let controls = document.createElement("div");
+  controls.id = "controls";
+  let b0 = buttonElement("", "b0", () => {});
+  let b1 = buttonElement("", "b1", () => {});
+  let b2 = buttonElement("", "b2", () => {});
+  let b3 = buttonElement("", "b3", () => {});
+  controls.append(b0, b1, b2, b3);
+
   hud.innerHTML = "";
-  hud.append(pauseButton);
-  isGame || hud.append(editComplete, resetButton);
+  hud.append(upperHud);
+  gameState.touchControls && hud.append(controls);
 };
 
 export let showMainMenu = () => {

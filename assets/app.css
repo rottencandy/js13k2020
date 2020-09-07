@@ -14,9 +14,11 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  position:absolute;
 }
 #hud{
- display:flex;
  position:absolute;
  visibility:hidden;
+}
+#hudmenu{
+ display:flex;
 }
 #ui{
  display:flex;
@@ -96,6 +98,26 @@ input{
  align-self:center;
  transition:0.3s;
 }
+#controls{
+position:fixed;
+display:grid;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+grid-template-columns:repeat(2,1fr);
+}
+#b0,#b1,#b2,#b3{
+width:0;
+height:0;
+margin:5px;
+border:30px solid #222;
+border-radius:9px;
+cursor:pointer;
+}
+#b0,#b1{border-bottom:30px solid #777}
+#b2,#b3{border-top:30px solid #777}
+#b0,#b2{border-right:30px solid #777}
+#b1,#b3{border-left:30px solid #777}
 
 .fadein{animation:0.7s ease fadein}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
