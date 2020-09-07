@@ -12,6 +12,21 @@ let base = document.getElementById("ui"),
   VISIBLE = "visible",
   HIDDEN = "hidden";
 
+let textElement = (text, id) => {
+  let ele = document.createElement("div");
+  ele.id = id;
+  ele.innerText = text;
+  return ele;
+};
+
+let buttonElement = (text, id, callback) => {
+  let ele = document.createElement("div");
+  ele.id = id;
+  ele.innerText = text;
+  ele.onclick = callback;
+  return ele;
+};
+
 let setUIElement = (ele) => {
   base.style.visibility = VISIBLE;
   hud.style.visibility = HIDDEN;
@@ -30,21 +45,6 @@ let hideUI = (isGame) => {
   });
   hud.innerHTML = "";
   hud.append(pauseButton);
-};
-
-let textElement = (text, id) => {
-  let ele = document.createElement("div");
-  ele.id = id;
-  ele.innerText = text;
-  return ele;
-};
-
-let buttonElement = (text, id, callback) => {
-  let ele = document.createElement("div");
-  ele.id = id;
-  ele.innerText = text;
-  ele.onclick = callback;
-  return ele;
 };
 
 export let showMainMenu = () => {
@@ -76,6 +76,7 @@ let startOrResumeGame = (isGame) => {
   hideUI(isGame);
   startLoop(isGame ? gameLoop : editorLoop, () => {
     if (!gameState.state) {
+      // TODO: set level as completed
       showMainMenu();
     } else {
       // paused through esc button
@@ -135,7 +136,6 @@ let showLevelsMenu = () => {
     })
   );
   wrapper.append(backButton, title, levelsGrid);
-
   setUIElement(wrapper);
 };
 

@@ -4,6 +4,7 @@ export let Key = {
   down: false,
   left: false,
   esc: false,
+  space: false,
   mouse: { down: false, x: 0, y: 0 },
 };
 
@@ -34,6 +35,11 @@ onkeydown = (e) => {
   if (keycode == 27) {
     Key.esc = true;
   }
+
+  // space
+  if (keycode == 32) {
+    Key.space = true;
+  }
 };
 
 // Keyup listener
@@ -62,6 +68,11 @@ onkeyup = (e) => {
   // Esc
   if (keycode == 27) {
     Key.esc = false;
+  }
+
+  // space
+  if (keycode == 32) {
+    Key.space = true;
   }
 };
 
