@@ -55,24 +55,37 @@ export let init = (gl) => {
 };
 
 export let createTileData = (x, y, type, startAtZero = false) => {
-  return {
-    type,
-    zpos: STARTZPOS,
-    modelView: transform(identity(), {
-      x: x * TILEWIDTH + TILEGAP * x,
-      y: y * TILEWIDTH + TILEGAP * y,
-      z: startAtZero ? 0 : STARTZPOS,
-    }),
-  };
+  switch (type) {
+    case "a":
+      return {
+        type,
+        zpos: 0,
+        modelView: identity(),
+      };
+    default:
+      return {
+        type,
+        zpos: STARTZPOS,
+        modelView: transform(identity(), {
+          x: x * TILEWIDTH + TILEGAP * x,
+          y: y * TILEWIDTH + TILEGAP * y,
+          z: startAtZero ? 0 : STARTZPOS,
+        }),
+      };
+  }
 };
 
 export let setEnterPos = (tile, index) => {
   if (tile.zpos === 0) return;
   switch (tile.type) {
-    case "a":
+    // start tile, behaves similar to "b"
     case "x":
-    case "c":
+    // gap
+    case "a":
+    // basic non-interactive tile
     case "b":
+    // destination tile
+    case "c":
       // cleanup if tile moved too far away, else move it up normally
       let displace = tile.zpos < 0 ? -tile.zpos : -7 - (index + 1) * 5;
       transform(tile.modelView, { z: displace });
@@ -83,10 +96,10 @@ export let setEnterPos = (tile, index) => {
 export let checkTile = (tile) => {
   switch (tile.type) {
     // Win
-    case "b":
+    case "c":
       return 1;
     // Fall
-    case "c":
+    case "a":
       return 2;
     // Continue
     default:
@@ -110,7 +123,7 @@ export let loadTileBuffer = (gl, parentTransform) => {
 };
 
 export let drawTile = (gl, tile) => {
-  if (tile.type === "c") {
+  if (tile.type === "a") {
     return;
   }
   gl.uniformMatrix4fv(program.uniforms.modelMatrix, false, tile.modelView);

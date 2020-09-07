@@ -6,6 +6,7 @@ import { getCanvasSize } from "./game";
 let gridWidth,
   parentTransform = identity(),
   state = 0,
+  levelFinished = false,
   initPos = [0, 0];
 export let platforms = [];
 
@@ -39,11 +40,19 @@ export let update = (delta) => {
       ) {
         Player.fall();
         state = 2;
-      } else if (
-        Tile.checkTile(platforms[Player.X + gridWidth * Player.Y]) === 2
-      ) {
-        Player.fall();
-        state = 2;
+      } else {
+        let tileInfo = Tile.checkTile(
+          platforms[Player.X + gridWidth * Player.Y]
+        );
+        if (tileInfo === 2) {
+          Player.fall();
+          state = 2;
+        }
+        if (tileInfo === 1) {
+          Player.fall();
+          state = 2;
+          levelFinished = true;
+        }
       }
       return 1;
     // Wait for animation
@@ -51,6 +60,9 @@ export let update = (delta) => {
       if (Player.update()) {
         Player.initPos(initPos[0], initPos[1]);
         state = 1;
+        if (levelFinished) {
+          return 0;
+        }
       }
       return 1;
   }
@@ -67,7 +79,9 @@ export let draw = (gl) => {
 export let loadLevel = (levelData) => {
   Player.initPos(-10, -10);
   [gridWidth, tiles] = levelData.split(":");
+  gridWidth = Number(gridWidth);
   state = 0;
+  levelFinished = false;
 
   {
     let [width, height] = getCanvasSize();
@@ -79,7 +93,7 @@ export let loadLevel = (levelData) => {
     });
   }
   // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
-  (parsedTiles = []).length = gridWidth * 2;
+  (parsedTiles = []).length = gridWidth * gridWidth;
   // First, create array of decoded tile chars
   for (let i = 0, curPos = 0; i < tiles.length; i++) {
     let val = tiles.charAt(i);
@@ -99,7 +113,7 @@ export let loadLevel = (levelData) => {
       let type = parsedTiles[x + y * gridWidth];
 
       // TODO is this efficient? Only done once, so does it matter?
-      if (type === "a") {
+      if (type === "x") {
         initPos[0] = x;
         initPos[1] = y;
       }
