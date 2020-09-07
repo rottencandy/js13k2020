@@ -1,5 +1,11 @@
 import { startLoop } from "./engine/loop.js";
-import { gameLoop, gameState, editorLoop, getCanvasSize } from "./game";
+import {
+  gameLoop,
+  gameState,
+  editorLoop,
+  getCanvasSize,
+  checkMonetization,
+} from "./game";
 import { loadLevel, pauseScene } from "./scene";
 import { levels } from "./levels";
 import * as Editor from "./editor.js";
@@ -32,6 +38,7 @@ let setUIElement = (ele) => {
   hud.style.visibility = HIDDEN;
   base.innerHTML = "";
   base.append(ele);
+  checkMonetization();
 };
 
 let hideUI = (isGame) => {
@@ -43,8 +50,16 @@ let hideUI = (isGame) => {
     // paused through UI
     showPauseMenu(isGame);
   });
+  let editComplete = buttonElement("✓", "pausebutton", () => {
+    hud.style.visibility = HIDDEN;
+    console.log(Editor.getEncodedLevel());
+  });
+  let resetButton = buttonElement("↺", "pausebutton", () =>
+    Editor.reset(...getCanvasSize())
+  );
   hud.innerHTML = "";
   hud.append(pauseButton);
+  isGame || hud.append(editComplete, resetButton);
 };
 
 export let showMainMenu = () => {

@@ -72,7 +72,7 @@ onkeyup = (e) => {
 
   // space
   if (keycode == 32) {
-    Key.space = true;
+    Key.space = false;
   }
 };
 

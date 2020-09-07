@@ -75,6 +75,10 @@ export let createTileData = (x, y, type, startAtZero = false) => {
   }
 };
 
+export let getTilesList = () => {
+  return ["x", "a", "b", "c"];
+};
+
 export let setEnterPos = (tile, index) => {
   if (tile.zpos === 0) return;
   switch (tile.type) {

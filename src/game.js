@@ -11,10 +11,20 @@ import * as Editor from "./editor.js";
  *
  * @property {0 | 1 | 2 | 3} state - game state
  * @property {number} level currently played level
+ * @property {boolean} hasCoil coil subscription state
  */
 export let gameState = {
+  hasCoil: false,
   state: 0,
   level: 0,
+};
+
+export let checkMonetization = () => {
+  gameState.hasCoil ||
+    (document.monetization &&
+      document.monetization.addEventListener("monetizationstart", function () {
+        gameState.hasCoil = true;
+      }));
 };
 
 let gl;
