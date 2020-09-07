@@ -47,12 +47,12 @@ let hideUI = (isGame) => {
   let pauseButton = buttonElement("II", "pausebutton", () => {
     hud.style.visibility = HIDDEN;
     isGame ? pauseScene() : Editor.pauseEditor();
-    // paused through UI
-    showPauseMenu(isGame);
+    // no need to run pause here because it's picked up by startOrResumeGame
   });
   let editComplete = buttonElement("✓", "pausebutton", () => {
     hud.style.visibility = HIDDEN;
-    console.log(Editor.getEncodedLevel());
+    Editor.pauseEditor();
+    gameState.editedLevel = true;
   });
   let resetButton = buttonElement("↺", "pausebutton", () =>
     Editor.reset(...getCanvasSize())
@@ -115,7 +115,22 @@ let showPauseMenu = (isGame) => {
     fadeOut();
     setTimeout(showMainMenu, 500);
   });
-  wrapper.append(title, resumeButton, mainMenuButton);
+  // the pause menu is reused to show the level editor completed screen
+  if (!isGame && gameState.editedLevel) {
+    gameState.editedLevel = false;
+    let title = textElement("LEVEL CREATED", "subtitle");
+    let levelText = document.createElement("input");
+    levelText.value = Editor.getEncodedLevel();
+    levelText.readOnly = true;
+    // give it some time to attach to DOM
+    setTimeout(() => {
+      levelText.focus();
+      levelText.select();
+    }, 10);
+    wrapper.append(title, levelText, mainMenuButton);
+  } else {
+    wrapper.append(title, resumeButton, mainMenuButton);
+  }
   setUIElement(wrapper);
 };
 

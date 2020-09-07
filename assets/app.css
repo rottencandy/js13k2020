@@ -42,6 +42,14 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  background:#222;
  margin:2rem auto;
 }
+input{
+ font:inherit;
+ width:100%;
+ background:#ccc;
+ padding:0;
+ border:0;
+ border-bottom:2px solid #222;
+}
 #button,#backbutton,#pausebutton{
  background:#ccc;
  cursor:pointer;

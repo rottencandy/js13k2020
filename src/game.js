@@ -15,6 +15,7 @@ import * as Editor from "./editor.js";
  */
 export let gameState = {
   hasCoil: false,
+  editedLevel: false,
   state: 0,
   level: 0,
 };

@@ -62,7 +62,13 @@ export let createTileData = (x, y, type, startAtZero = false) => {
         zpos: 0,
         modelView: identity(),
       };
-    default:
+    case "x":
+    // gap
+    case "a":
+    // basic non-interactive tile
+    case "b":
+    // destination tile
+    case "c":
       return {
         type,
         zpos: STARTZPOS,
@@ -72,6 +78,8 @@ export let createTileData = (x, y, type, startAtZero = false) => {
           z: startAtZero ? 0 : STARTZPOS,
         }),
       };
+    default:
+      return null;
   }
 };
 

@@ -56,7 +56,19 @@ export let getEncodedLevel = () => {
       }
     }
   }
-  return encodedRows.reduce((acc, val) => acc + val, "");
+  // Uncommented because this need to affect gridWidth value
+  // TODO: this still doesn't trim empty columns
+  // trim empty rows from bottom
+  //let rowLength = encodedRows.length - 1;
+  //while (encodedRows[rowLength--] === gridWidth + "a") {
+  //  encodedRows.pop();
+  //}
+  //// trim empty rows from top
+  //rowLength = 0;
+  //while (encodedRows[rowLength++] === gridWidth + "a") {
+  //  encodedRows.shift();
+  //}
+  return gridWidth + ":" + encodedRows.reduce((acc, val) => acc + val, "");
 };
 
 export let update = () => {
