@@ -50,6 +50,9 @@ input{
  border:0;
  border-bottom:2px solid #222;
 }
+.wrong{
+ border:3px solid red;
+}
 #button,#backbutton,#pausebutton{
  background:#ccc;
  cursor:pointer;

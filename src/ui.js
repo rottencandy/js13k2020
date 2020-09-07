@@ -183,7 +183,19 @@ let showCustomLevelsMenu = () => {
   });
 
   let customLevelButton = buttonElement("LOAD LEVEL", "button", () => {
-    console.log("TODO");
+    let wrapper = document.createElement("div");
+    wrapper.id = "mainmenu";
+    wrapper.className = CENTERED_FADEIN;
+    let fadeOut = () => (wrapper.className = CENTERED_FADEOUT);
+    let title = textElement("ENTER LEVEL DATA", "subtitle");
+    let levelText = document.createElement("input");
+    let editorButton = buttonElement("START", "button", () => {
+      loadLevel(levelText.value)
+        ? (fadeOut(), setTimeout(startOrResumeGame, 500, true))
+        : (levelText.className = "wrong");
+    });
+    wrapper.append(backButton, title, levelText, editorButton);
+    setUIElement(wrapper);
   });
   let editorButton = buttonElement("CREATE LEVEL", "button", () => {
     fadeOut();

@@ -77,11 +77,15 @@ export let draw = (gl) => {
 };
 
 export let loadLevel = (levelData) => {
+  // to temporarily hide player until tiles show up
   Player.initPos(-10, -10);
   [gridWidth, tiles] = levelData.split(":");
   gridWidth = Number(gridWidth);
   state = 0;
   levelFinished = false;
+  if (!levelData || !gridWidth || gridWidth < 0) {
+    return 0;
+  }
 
   {
     let [width, height] = getCanvasSize();
@@ -120,4 +124,5 @@ export let loadLevel = (levelData) => {
       platforms.push(Tile.createTileData(x, y, type));
     }
   }
+  return 1;
 };
