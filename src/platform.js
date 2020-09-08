@@ -1,6 +1,7 @@
+import { transform, identity, degToRad } from "./engine/math";
+import * as Camera from "./engine/camera";
 import * as Player from "./player";
 import * as Tile from "./tile";
-import { transform, identity, degToRad } from "./engine/math";
 
 let gridWidth,
   parentTransform = identity(),
@@ -80,6 +81,7 @@ export let draw = (gl) => {
 };
 
 export let loadLevel = (levelData) => {
+  Camera.update(gameWidth, gameHeight);
   // to temporarily hide player until tiles show up
   Player.initPos(-10, -10);
   [gridWidth, tiles] = levelData.split(":");

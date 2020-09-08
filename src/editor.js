@@ -21,6 +21,7 @@ let gridWidth = 1,
 
 export let reset = () => {
   state = 0;
+  Camera.update(sceneWidth, sceneHeight);
   parentTransform = transform(identity(), {
     y: sceneWidth / 2,
     x: sceneHeight / 2,
