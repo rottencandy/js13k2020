@@ -1,4 +1,5 @@
 import { compile, makeBuffer } from "./engine/gl";
+import { backdropBase } from "./palette";
 
 let vertexBuffer, program;
 
@@ -12,9 +13,10 @@ void main() {
 
 let fshader = `precision mediump float;
 varying vec2 vST;
+uniform vec3 uColor;
 
 void main() {
-  gl_FragColor = vec4(0.7, 0.7, 0.7, 1.0);
+  gl_FragColor = vec4(uColor, 1.0);
 }`;
 
 export let init = (gl) => {
@@ -26,5 +28,6 @@ export let draw = (gl) => {
   program.use();
 
   vertexBuffer.bind(2, program.attribs.vertex);
+  gl.uniform3fv(program.uniforms.color, backdropBase);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };

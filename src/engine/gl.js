@@ -35,6 +35,8 @@ export let compile = (gl, vshader, fshader) => {
       projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix"),
       lightDir: gl.getUniformLocation(program, "uLightDir"),
       jump: gl.getUniformLocation(program, "uJump"),
+      color: gl.getUniformLocation(program, "uColor"),
+      backdrop: gl.getUniformLocation(program, "uBackdrop"),
     },
   };
 };

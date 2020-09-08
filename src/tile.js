@@ -2,7 +2,7 @@ import { compile, makeBuffer } from "./engine/gl";
 import * as Camera from "./engine/camera";
 import { identity, transform } from "./engine/math";
 import { partialCube, partialCubeNormal } from "./shapes";
-import { lightDirection } from "./palette";
+import { lightDirection, tileColor, backdropBase } from "./palette";
 
 export let TILEGAP = 10,
   TILEWIDTH = 50,
@@ -12,7 +12,6 @@ export let TILEGAP = 10,
 let program;
 
 // Vertex shader
-// TODO: light direction(normal) is hardcoded for now
 let vshader = `attribute vec4 aVertexPosition;
 attribute vec3 aNormal;
 
@@ -30,16 +29,17 @@ void main() {
 }`;
 
 // Fragment shader
-// TODO: lazily calculated fog, will look ugly when backdrop changes
 let fshader = `precision mediump float;
 uniform vec3 uLightDir;
+uniform vec3 uColor;
+uniform vec3 uBackdrop;
 
 varying vec3 vNormal;
 varying float vDepth;
 
 void main() {
   float light = dot(normalize(vNormal), uLightDir);
-  gl_FragColor = mix(vec4(1.0, 0.0, 0.0, 1.0), vec4(0.8, 0.8, 0.8, 1.0), vDepth);
+  gl_FragColor = mix(vec4(uColor,1.), vec4(uBackdrop, 1.), vDepth);
   gl_FragColor.xyz *= light;
 }`;
 
@@ -132,12 +132,14 @@ export let loadTileBuffer = (gl, parentTransform) => {
     Camera.projectionMatrix
   );
   gl.uniform3fv(program.uniforms.lightDir, lightDirection);
+  gl.uniform3fv(program.uniforms.backdrop, backdropBase);
 };
 
 export let drawTile = (gl, tile) => {
   if (tile.type === "a") {
     return;
   }
+  gl.uniform3fv(program.uniforms.color, tileColor[tile.type]);
   gl.uniformMatrix4fv(program.uniforms.modelMatrix, false, tile.modelView);
   gl.drawArrays(gl.TRIANGLES, 0, 18);
 };

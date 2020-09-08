@@ -4,7 +4,7 @@ import { Key } from "./engine/input";
 import * as Camera from "./engine/camera";
 import { TILEWIDTH, TILEGAP } from "./tile";
 import { partialCube, partialCubeNormal } from "./shapes";
-import { lightDirection } from "./palette";
+import { lightDirection, playerColor } from "./palette";
 
 // Vertex shader
 // TODO: hardcoded height value
@@ -28,6 +28,7 @@ void main() {
 // TODO: hardcoded glow value
 let fshader = `precision mediump float;
 uniform vec3 uLightDir;
+uniform vec3 uColor;
 uniform float uJump;
 
 varying vec3 vNormal;
@@ -36,14 +37,14 @@ varying float vHeight;
 void main() {
   float light = dot(normalize(vNormal), uLightDir);
   float glow = step(vHeight, uJump);
-  gl_FragColor = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(1.,1.,1.,1.), glow);
+  gl_FragColor = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(0.9,1.,0.9,1.), glow);
   gl_FragColor.xyz *= light;
 }`;
 
 let buffer,
   SIZE = 10,
   HEIGHT = 40,
-  SPEED = 0.1,
+  SPEED = 0.09,
   targetPos = [0, 0],
   activePos = [0, 0],
   Z = 0,
@@ -108,7 +109,8 @@ export let update = (_delta) => {
           ? ((activePos[0] += SPEED), (xDisp += SPEED))
           : ((activePos[0] -= SPEED), (xDisp -= SPEED));
 
-        if (Math.abs(activePos[0] - targetPos[0]) < 0.01) {
+        // sanity check, ignore very small distances
+        if (Math.abs(activePos[0] - targetPos[0]) < 0.05) {
           activePos[0] = targetPos[0];
         }
       } else if (activePos[1] !== targetPos[1]) {
@@ -116,7 +118,8 @@ export let update = (_delta) => {
           ? ((activePos[1] += SPEED), (yDisp += SPEED))
           : ((activePos[1] -= SPEED), (yDisp -= SPEED));
 
-        if (Math.abs(activePos[1] - targetPos[1]) < 0.01) {
+        // sanity check, ignore very small distances
+        if (Math.abs(activePos[1] - targetPos[1]) < 0.05) {
           activePos[1] = targetPos[1];
         }
       } else {
@@ -164,6 +167,7 @@ export let load = (gl, parentTransform) => {
     Camera.projectionMatrix
   );
   gl.uniform3fv(program.uniforms.lightDir, lightDirection);
+  gl.uniform3fv(program.uniforms.color, playerColor);
   gl.uniform1f(program.uniforms.jump, jump / 3);
 };
 
@@ -177,9 +181,10 @@ export let initPos = (x, y) => {
   Y = targetPos[1] = activePos[1] = y;
   state = Z = 0;
 
+  // Looks scary but really isn't
   modelView = transform(identity(), {
-    x: X * TILEWIDTH + TILEGAP * X,
-    y: Y * TILEWIDTH + TILEGAP * Y,
+    x: X * TILEWIDTH + TILEGAP * X + TILEWIDTH / 2 - SIZE / 2,
+    y: Y * TILEWIDTH + TILEGAP * Y + TILEWIDTH / 2 - SIZE / 2,
     z: 0,
   });
 };

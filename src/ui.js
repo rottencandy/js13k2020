@@ -100,7 +100,7 @@ export let showMainMenu = () => {
   let fadeOut = () => (wrapper.className = "centered zoomin");
 
   // Title text
-  let title = textElement("A GAME", "title");
+  let title = textElement("FOURFOLD", "title");
 
   // Main start button
   let startButton = buttonElement("START", "button", () => {
