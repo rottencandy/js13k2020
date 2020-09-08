@@ -80,16 +80,16 @@ onkeyup = (e) => {
 let canvas = document.getElementById("app"),
   x = 0,
   y = 0;
-canvas.onmousedown = (e) => {
+canvas.onpointerdown = (e) => {
   Key.mouse.down = true;
   x = e.offsetX;
   y = e.offsetY;
 };
-canvas.onmouseup = () => {
+canvas.onpointerup = () => {
   Key.mouse.down = false;
   Key.mouse.x = Key.mouse.y = 0;
 };
-canvas.onmousemove = (e) => {
+canvas.onpointermove = (e) => {
   Key.mouse.x = Key.mouse.y = 0;
   if (Key.mouse.down) {
     Key.mouse.x = e.offsetX - x;
