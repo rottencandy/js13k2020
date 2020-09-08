@@ -18,10 +18,9 @@ export let compile = (gl, vshader, fshader) => {
   gl.attachShader(program, fs);
   gl.linkProgram(program);
 
-  // TODO: comment these lines
-  console.log("vertex shader:", gl.getShaderInfoLog(vs) || "OK");
-  console.log("fragment shader:", gl.getShaderInfoLog(fs) || "OK");
-  console.log("program:", gl.getProgramInfoLog(program) || "OK");
+  //console.log("vertex shader:", gl.getShaderInfoLog(vs) || "OK");
+  //console.log("fragment shader:", gl.getShaderInfoLog(fs) || "OK");
+  //console.log("program:", gl.getProgramInfoLog(program) || "OK");
 
   return {
     program,

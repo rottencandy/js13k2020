@@ -3,7 +3,6 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  margin:0;
  background:radial-gradient(#999, #777);
  color:#222;
- overflow-y:hidden;
 }
 .centered{
  position:absolute;
@@ -101,7 +100,7 @@ display:grid;
 bottom:0;
 left:50%;
 transform:translateX(-50%);
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:1fr 1fr;
 }
 #b0,#b1,#b2,#b3{
 width:0;
@@ -117,6 +116,7 @@ cursor:pointer;
 #b2,#b3{border-top:30px solid #777}
 #b0,#b2{border-right:30px solid #777}
 #b1,#b3{border-left:30px solid #777}
+.b4{position:absolute;left:10rem;}
 
 @media(max-width:540px){
  #levelsgrid{grid-template-columns:repeat(3,1fr)}

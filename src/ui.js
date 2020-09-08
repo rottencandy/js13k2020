@@ -37,10 +37,10 @@ let setUIElement = (ele) => {
 };
 
 // touch controls
-let touchButton = (id, key) => {
+let touchButton = (id, key, content = "") => {
   let ele = document.createElement("div");
   ele.id = id;
-  ele.innerText = "";
+  ele.innerText = content;
   ele.onpointerdown = () => onkeydown({ keyCode: keyCodes[key] });
   ele.onpointerup = () => onkeyup({ keyCode: keyCodes[key] });
   return ele;
@@ -49,6 +49,8 @@ let b0 = touchButton("b0", "up");
 let b1 = touchButton("b1", "right");
 let b2 = touchButton("b2", "left");
 let b3 = touchButton("b3", "down");
+let b4 = touchButton("button", "space", "⮤⮧");
+b4.className = "b4";
 // Button to enable touch controls
 let enableTouchButton = buttonElement("☐ TOUCH CONTROLS", "button", (e) => {
   if (gameState.touchControls) {
@@ -86,6 +88,7 @@ let hideUI = (isGame) => {
     let controls = document.createElement("div");
     controls.id = "controls";
     controls.append(b0, b1, b2, b3);
+    isGame || controls.append(b4);
     hud.append(controls);
   }
 };
