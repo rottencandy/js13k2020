@@ -8,6 +8,14 @@ export let Key = {
   mouse: { down: false, x: 0, y: 0 },
 };
 
+export let keyCodes = {
+  left: 37,
+  right: 39,
+  up: 38,
+  down: 40,
+  space: 32,
+};
+
 // Keydown listener
 onkeydown = (e) => {
   let keycode = e.keyCode;
@@ -76,7 +84,7 @@ onkeyup = (e) => {
   }
 };
 
-// For handling mouse drag events
+// For handling mouse drag and touch events
 let canvas = document.getElementById("app"),
   x = 0,
   y = 0;

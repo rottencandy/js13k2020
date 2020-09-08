@@ -1,14 +1,9 @@
 import { startLoop } from "./engine/loop.js";
-import {
-  gameLoop,
-  gameState,
-  editorLoop,
-  getCanvasSize,
-  checkMonetization,
-} from "./game";
+import { gameLoop, gameState, editorLoop, checkMonetization } from "./game";
 import { loadLevel, pauseScene } from "./scene";
 import { levels } from "./levels";
 import * as Editor from "./editor.js";
+import { keyCodes } from "./engine/input.js";
 
 let base = document.getElementById("ui"),
   hud = document.getElementById("hud"),
@@ -41,6 +36,30 @@ let setUIElement = (ele) => {
   checkMonetization();
 };
 
+// touch controls
+let touchButton = (id, key) => {
+  let ele = document.createElement("div");
+  ele.id = id;
+  ele.innerText = "";
+  ele.onpointerdown = () => onkeydown({ keyCode: keyCodes[key] });
+  ele.onpointerup = () => onkeyup({ keyCode: keyCodes[key] });
+  return ele;
+};
+let b0 = touchButton("b0", "up");
+let b1 = touchButton("b1", "right");
+let b2 = touchButton("b2", "left");
+let b3 = touchButton("b3", "down");
+// Button to enable touch controls
+let enableTouchButton = buttonElement("☐ TOUCH CONTROLS", "button", (e) => {
+  if (gameState.touchControls) {
+    gameState.touchControls = false;
+    e.target.innerText = "☐ TOUCH CONTROLS";
+  } else {
+    gameState.touchControls = true;
+    e.target.innerText = "☑ TOUCH CONTROLS";
+  }
+});
+
 let hideUI = (isGame) => {
   base.style.visibility = HIDDEN;
   hud.style.visibility = VISIBLE;
@@ -55,26 +74,20 @@ let hideUI = (isGame) => {
     Editor.pauseEditor();
     gameState.editedLevel = true;
   });
-  let resetButton = buttonElement("↺", "pausebutton", () =>
-    Editor.reset(...getCanvasSize())
-  );
+  let resetButton = buttonElement("↺", "pausebutton", () => Editor.reset());
   let upperHud = document.createElement("div");
   upperHud.id = "hudmenu";
   upperHud.append(pauseButton);
   isGame || upperHud.append(editComplete, resetButton);
 
-  // touch controls
-  let controls = document.createElement("div");
-  controls.id = "controls";
-  let b0 = buttonElement("", "b0", () => {});
-  let b1 = buttonElement("", "b1", () => {});
-  let b2 = buttonElement("", "b2", () => {});
-  let b3 = buttonElement("", "b3", () => {});
-  controls.append(b0, b1, b2, b3);
-
   hud.innerHTML = "";
   hud.append(upperHud);
-  gameState.touchControls && hud.append(controls);
+  if (gameState.touchControls) {
+    let controls = document.createElement("div");
+    controls.id = "controls";
+    controls.append(b0, b1, b2, b3);
+    hud.append(controls);
+  }
 };
 
 export let showMainMenu = () => {
@@ -98,7 +111,7 @@ export let showMainMenu = () => {
     setTimeout(showCustomLevelsMenu, 500);
   });
 
-  wrapper.append(title, startButton, customLevelsButton);
+  wrapper.append(title, startButton, customLevelsButton, enableTouchButton);
   setUIElement(wrapper);
 };
 
@@ -144,7 +157,7 @@ let showPauseMenu = (isGame) => {
     }, 10);
     wrapper.append(title, levelText, mainMenuButton);
   } else {
-    wrapper.append(title, resumeButton, mainMenuButton);
+    wrapper.append(title, resumeButton, enableTouchButton, mainMenuButton);
   }
   setUIElement(wrapper);
 };
@@ -214,7 +227,7 @@ let showCustomLevelsMenu = () => {
   });
   let editorButton = buttonElement("CREATE LEVEL", "button", () => {
     fadeOut();
-    Editor.reset(...getCanvasSize());
+    Editor.reset();
     setTimeout(startOrResumeGame, 500, false);
   });
   wrapper.append(backButton, title, customLevelButton, editorButton);

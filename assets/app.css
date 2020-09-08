@@ -3,6 +3,7 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  margin:0;
  background:radial-gradient(#999, #777);
  color:#222;
+ overflow-y:hidden;
 }
 .centered{
  position:absolute;
@@ -56,6 +57,7 @@ input{
  border:3px solid red;
 }
 #button,#backbutton,#pausebutton{
+ font-size:2rem;
  background:#ccc;
  cursor:pointer;
  margin:1rem auto;
@@ -85,11 +87,6 @@ input{
  grid-gap:10px;
  grid-template-columns:repeat(4,1fr);
 }
-@media(max-width:540px){
- #levelsgrid{
- grid-template-columns:repeat(3,1fr);
- }
-}
 #level{
  background:#ccc;
  cursor:pointer;
@@ -114,10 +111,19 @@ border:30px solid #222;
 border-radius:9px;
 cursor:pointer;
 }
+#b0:active,#b1:active,#b2:active,#b3:active{transform:scale(0.9)}
+
 #b0,#b1{border-bottom:30px solid #777}
 #b2,#b3{border-top:30px solid #777}
 #b0,#b2{border-right:30px solid #777}
 #b1,#b3{border-left:30px solid #777}
+
+@media(max-width:540px){
+ #levelsgrid{grid-template-columns:repeat(3,1fr)}
+ body{font:100 2rem Trebuchet,sans-serif}
+ #subtitle{margin:3rem auto}
+ #button,#backbutton,#pausebutton{font-size:1.5rem}
+}
 
 .fadein{animation:0.7s ease fadein}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
