@@ -10,6 +10,8 @@ let gridWidth = 1,
   parentTransform = identity(),
   platforms = [],
   tileData = [],
+  sceneWidth,
+  sceneHeight,
   pauseNextIteration = false,
   // These two keep track of the number of negative(outside of grid) steps we've taken
   // So we could update tileData grid properly
@@ -17,11 +19,11 @@ let gridWidth = 1,
   negativeX = 1,
   negativeY = 1;
 
-export let reset = (width, height) => {
+export let reset = () => {
   state = 0;
   parentTransform = transform(identity(), {
-    y: width / 2,
-    x: height / 2,
+    y: sceneWidth / 2,
+    x: sceneHeight / 2,
     rx: -degToRad(30),
     rz: -Math.PI / 4,
   });
@@ -31,7 +33,9 @@ export let reset = (width, height) => {
   tileData = [[createTileData(0, 0, "x", true)]];
 };
 
-export let init = (gl) => {
+export let init = (gl, width, height) => {
+  sceneWidth = width;
+  sceneHeight = height;
   // no need to init tiles, already done in game.js
   Selector.init(gl);
 };

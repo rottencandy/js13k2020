@@ -1,16 +1,19 @@
 import * as Player from "./player";
 import * as Tile from "./tile";
 import { transform, identity, degToRad } from "./engine/math";
-import { getCanvasSize } from "./game";
 
 let gridWidth,
   parentTransform = identity(),
   state = 0,
   levelFinished = false,
-  initPos = [0, 0];
+  initPos = [0, 0],
+  gameWidth,
+  gameHeight;
 export let platforms = [];
 
-export let init = (gl) => {
+export let init = (gl, width, height) => {
+  gameWidth = width;
+  gameHeight = height;
   Tile.init(gl);
   Player.init(gl);
 };
@@ -88,10 +91,9 @@ export let loadLevel = (levelData) => {
   }
 
   {
-    let [width, height] = getCanvasSize();
     parentTransform = transform(identity(), {
-      y: width / 2,
-      x: height / 2,
+      y: gameWidth / 2,
+      x: gameHeight / 2,
       rx: -degToRad(30),
       rz: -Math.PI / 4,
     });

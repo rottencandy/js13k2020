@@ -10,7 +10,7 @@ let aspect = WIDTH / HEIGHT;
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
-initGame(canvas);
+initGame(canvas, WIDTH, HEIGHT);
 
 // Maintain aspect ratio
 onresize = () => {

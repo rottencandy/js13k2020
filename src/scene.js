@@ -1,12 +1,13 @@
+import * as Camera from "./engine/camera";
+import { Key } from "./engine/input";
 import * as Platform from "./platform";
 import * as Backdrop from "./backdrop";
-import { Key } from "./engine/input";
 
 let pauseNextIteration = false;
 
-export let init = (gl) => {
+export let init = (gl, width, height) => {
   Backdrop.init(gl);
-  Platform.init(gl);
+  Platform.init(gl, width, height);
 };
 
 export let loadLevel = Platform.loadLevel;
@@ -18,6 +19,10 @@ export let update = () => {
   if (Key.esc || pauseNextIteration) {
     pauseNextIteration = false;
     return 2;
+  }
+  if (Key.mouse.down) {
+    Camera.move(Key.mouse.x, Key.mouse.y);
+    Key.mouse.x = Key.mouse.y = 0;
   }
   return Platform.update();
 };

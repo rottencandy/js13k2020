@@ -16,7 +16,7 @@ import * as Editor from "./editor.js";
 export let gameState = {
   hasCoil: false,
   editedLevel: false,
-  touchControls: true,
+  touchControls: false,
   state: 0,
   level: 0,
 };
@@ -33,12 +33,12 @@ let gl;
 
 let clearScreen = () => gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-export let initGame = (canvas) => {
+export let initGame = (canvas, width, height) => {
   gl = canvas.getContext("webgl", { antialias: false });
 
   Camera.update(gl.canvas.width, gl.canvas.height);
-  Scene.init(gl);
-  Editor.init(gl);
+  Scene.init(gl, width, height);
+  Editor.init(gl, width, height);
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   gl.clearColor(0.1, 0.1, 0.1, 1.0);
@@ -47,8 +47,6 @@ export let initGame = (canvas) => {
   gl.enable(gl.CULL_FACE);
   gl.enable(gl.LEQUAL);
 };
-
-export let getCanvasSize = () => [gl.canvas.width, gl.canvas.height];
 
 export let gameLoop = (delta) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
