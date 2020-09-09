@@ -98,8 +98,8 @@ export let setEnterPos = (tile, index) => {
     case "b":
     // destination tile
     case "c":
-      // cleanup if tile moved too far away, else move it up normally
-      let displace = tile.zpos < 0 ? -tile.zpos : -7 - (index + 1) * 5;
+      // cleanup if tile moved too far away, else move it up gradually
+      let displace = tile.zpos < 0 ? -tile.zpos : -7 - (index + 1);
       transform(tile.modelView, { z: displace });
       tile.zpos += displace;
   }

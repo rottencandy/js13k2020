@@ -4,7 +4,7 @@ import * as Editor from "./editor.js";
 
 /**
  * Global game state
- * 0 = not playing
+ * 0 = not running
  * 1 = playing
  * 2 = paused
  * 3 = in level editor

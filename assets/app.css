@@ -22,8 +22,9 @@ body{font:100 2.5rem Trebuchet,sans-serif;
 }
 #ui{
  display:flex;
- flex-direction:column;
  height:100vh;
+ background:rgba(200,200,200,0.5);
+ flex-direction:column;
 }
 #mainmenu,#pausemenu{
  display:flex;

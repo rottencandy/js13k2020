@@ -13,3 +13,4 @@ export let backdropBase = [0.593, 0.654, 0.712];
 // source: https://stackoverflow.com/a/5624139/7683374
 export let rgbToHex = (r, g, b) =>
   "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+export let denormalize = ([r, g, b]) => [r * 255, g * 255, b * 255];
