@@ -1,5 +1,5 @@
-import { showMainMenu } from "./ui";
 import { initGame } from "./game.js";
+import { showMainMenu } from "./ui/main.js";
 
 let canvas = document.getElementById("app");
 
