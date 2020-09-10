@@ -10,6 +10,7 @@ import {
 } from "./utils";
 import { showMainMenu } from "./main";
 import { startGame } from "./start";
+import { gameState } from "../game";
 
 let showLevelInput = () => {
   let wrapper = document.createElement("div");
@@ -29,6 +30,7 @@ let showLevelInput = () => {
   let startButton = buttonElement("START", "button", () => {
     if (loadLevel(levelText.value)) {
       fadeOut();
+      gameState.level = 0;
       setTimeout(startGame, TIMEOUT_INTERVAL, false);
     } else {
       levelText.className = "wrong";

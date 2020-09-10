@@ -25,7 +25,6 @@ void main() {
 }`;
 
 // Fragment shader
-// TODO: hardcoded glow value
 let fshader = `precision mediump float;
 uniform vec3 uLightDir;
 uniform vec3 uColor;

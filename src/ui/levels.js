@@ -35,7 +35,7 @@ export let showLevelsMenu = () => {
       ele.id = "level";
       ele.innerText = i + 1;
       ele.onclick = () => {
-        gameState.level = i;
+        gameState.level = i + 1;
         fadeOut();
         loadLevel(level);
         setTimeout(startGame, TIMEOUT_INTERVAL, false);

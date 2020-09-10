@@ -1,9 +1,42 @@
 import { startLoop } from "../engine/loop";
 import { editorLoop, gameLoop, gameState } from "../game";
-import { base, HIDDEN } from "./utils";
+import {
+  base,
+  HIDDEN,
+  CENTERED_FADEIN,
+  CENTERED_FADEOUT,
+  buttonElement,
+  textElement,
+  setUIElement,
+} from "./utils";
 import { showMainMenu } from "./main";
 import { showEditCompleteMenu, showPauseMenu } from "./pause";
 import { showHUD } from "./hud";
+import { showCustomLevelsMenu } from "./custom";
+import { showLevelsMenu } from "./levels";
+
+// TODO: custom css for level completion
+let levelCompleted = (isCustom) => {
+  let wrapper = document.createElement("div");
+  wrapper.id = "pausemenu";
+  wrapper.className = CENTERED_FADEIN;
+  let fadeOut = () => (wrapper.className = CENTERED_FADEOUT);
+
+  let title = textElement("COMPLETED!", "subtitle");
+
+  let continueButton = buttonElement("CONTINUE", "button", () => {
+    fadeOut();
+    setTimeout(isCustom ? showCustomLevelsMenu : showLevelsMenu, 500);
+  });
+
+  let mainMenuButton = buttonElement("MAIN MENU", "button", () => {
+    fadeOut();
+    setTimeout(showMainMenu, 500);
+  });
+
+  wrapper.append(title, continueButton, mainMenuButton);
+  setUIElement(wrapper);
+};
 
 export let startGame = (isEditor) => {
   base.style.visibility = HIDDEN;
@@ -11,8 +44,8 @@ export let startGame = (isEditor) => {
 
   startLoop(isEditor ? editorLoop : gameLoop, () => {
     if (!gameState.state) {
-      // TODO: set level as completed, see if this is custom level
-      showMainMenu();
+      // TODO: splash screen for level completion
+      levelCompleted(gameState.level < 1);
     } else {
       // paused through esc button
       if (isEditor && gameState.editedLevel) {

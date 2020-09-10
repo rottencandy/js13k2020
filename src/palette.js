@@ -1,3 +1,5 @@
+import { floor } from "./engine/math";
+
 export let lightDirection = [-0.5, 0.8, -1.0];
 export let tileColor = {
   // start tile, behaves similar to "b"
@@ -11,6 +13,10 @@ export let playerColor = [0.44, 0.525, 0.627];
 export let playerGlowColor = [0.933, 0.894, 0.882];
 export let backdropBase = [0.593, 0.654, 0.712];
 // source: https://stackoverflow.com/a/5624139/7683374
-export let rgbToHex = (r, g, b) =>
+export let rgbToHex = ([r, g, b]) =>
   "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-export let denormalize = ([r, g, b]) => [r * 255, g * 255, b * 255];
+export let denormalize = ([r, g, b]) => [
+  floor(r * 255),
+  floor(g * 255),
+  floor(b * 255),
+];

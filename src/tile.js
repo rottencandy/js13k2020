@@ -6,12 +6,13 @@ import { lightDirection, tileColor, backdropBase } from "./palette";
 
 export let TILEGAP = 10,
   TILEWIDTH = 50,
-  TILEHEIGHT = 600,
+  TILEHEIGHT = 900,
   STARTZPOS = 1000;
 
 let program;
 
 // Vertex shader
+// TODO hardcoded tile height
 let vshader = `attribute vec4 aVertexPosition;
 attribute vec3 aNormal;
 
@@ -25,7 +26,7 @@ varying float vDepth;
 void main() {
   gl_Position = uProjectionMatrix * uParentTransform * uModelViewMatrix * aVertexPosition;
   vNormal = aNormal;
-  vDepth = aVertexPosition.z/500.0;
+  vDepth = aVertexPosition.z/900.;
 }`;
 
 // Fragment shader

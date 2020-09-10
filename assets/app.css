@@ -1,7 +1,6 @@
 html{height:100%;}
 body{font:100 2.5rem Trebuchet,sans-serif;
  margin:0;
- background:radial-gradient(#999, #777);
  color:#222;
 }
 .centered{
@@ -23,9 +22,10 @@ body{font:100 2.5rem Trebuchet,sans-serif;
 #ui{
  display:flex;
  height:100vh;
- background:rgba(200,200,200,0.5);
  flex-direction:column;
+ background:rgba(50,50,50,0.2);
 }
+#pausemenu{background:rgba(200,200,200,0.5)}
 #mainmenu,#pausemenu{
  display:flex;
  max-width:10em;

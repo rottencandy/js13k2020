@@ -1,3 +1,4 @@
+export let floor = Math.floor;
 export let radToDeg = r => r * 180 / Math.PI;
 export let degToRad = d => d * Math.PI / 180;
 
