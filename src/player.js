@@ -5,6 +5,7 @@ import * as Camera from "./engine/camera";
 import { TILEWIDTH, TILEGAP } from "./tile";
 import { partialCube, partialCubeNormal } from "./shapes";
 import { lightDirection, playerColor } from "./palette";
+import { moveSound } from "./sound/sounds";
 
 // Vertex shader
 // TODO: hardcoded height value
@@ -82,6 +83,7 @@ export let update = (_delta) => {
     case 1:
       if (Key.up || Key.down || Key.left || Key.right) {
         let stride = 1;
+        moveSound(jump);
         if (jump++ > 2) {
           stride = 2;
           jump = 0;

@@ -25,7 +25,6 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  flex-direction:column;
  background:rgba(50,50,50,0.2);
 }
-#pausemenu{background:rgba(200,200,200,0.5)}
 #mainmenu,#pausemenu{
  display:flex;
  max-width:10em;

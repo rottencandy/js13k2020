@@ -36,7 +36,7 @@ export let setUIElement = (ele) => {
   base.innerHTML = EMPTY;
   base.append(ele);
   checkMonetization();
-  document.body.style.background = `radial-gradient(${rgbToHex(
+  base.style.background = document.body.style.background = `radial-gradient(#576,${rgbToHex(
     denormalize(backdropBase)
-  )},#777)`;
+  )})`;
 };

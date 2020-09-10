@@ -7,7 +7,7 @@ export let tileColor = {
   // basic non-interactive tile
   b: [0.939, 0.131, 0.125],
   // destination tile
-  c: [0.702, 0.847, 0.612],
+  c: [0.502, 0.847, 0.412],
 };
 export let playerColor = [0.44, 0.525, 0.627];
 export let playerGlowColor = [0.933, 0.894, 0.882];
