@@ -1,5 +1,6 @@
 import { startLoop } from "../engine/loop";
 import { editorLoop, gameLoop, gameState } from "../game";
+import { finishedSound } from "../sound/sounds";
 import {
   base,
   HIDDEN,
@@ -15,7 +16,7 @@ import { showHUD } from "./hud";
 import { showCustomLevelsMenu } from "./custom";
 import { showLevelsMenu } from "./levels";
 
-// TODO: custom css for level completion
+// TODO: update localstorage
 let levelCompleted = (isCustom) => {
   let wrapper = document.createElement("div");
   wrapper.id = "pausemenu";
@@ -34,6 +35,7 @@ let levelCompleted = (isCustom) => {
     setTimeout(showMainMenu, 500);
   });
 
+  finishedSound();
   wrapper.append(title, continueButton, mainMenuButton);
   setUIElement(wrapper);
 };
