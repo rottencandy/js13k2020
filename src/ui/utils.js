@@ -1,4 +1,6 @@
 import { checkMonetization } from "../game";
+import { rgbToHex, denormalize, backdropBase } from "../palette";
+import { buttonClickSound } from "../sound/sounds";
 
 export let base = document.getElementById("ui"),
   hud = document.getElementById("hud"),
@@ -8,7 +10,7 @@ export let base = document.getElementById("ui"),
   VISIBLE = "visible",
   HIDDEN = "hidden",
   EMPTY = "",
-  TIMEOUT_INTERVAL;
+  TIMEOUT_INTERVAL = 500;
 
 export let create = (type, id, text) => {
   let ele = document.createElement(type);
@@ -21,7 +23,10 @@ export let textElement = (text, id) => create("div", id, text);
 
 export let buttonElement = (text, id, callback) => {
   let ele = textElement(text, id);
-  ele.onclick = callback;
+  ele.onclick = (e) => {
+    buttonClickSound();
+    callback(e);
+  };
   return ele;
 };
 
@@ -31,4 +36,7 @@ export let setUIElement = (ele) => {
   base.innerHTML = EMPTY;
   base.append(ele);
   checkMonetization();
+  document.body.style.background = `radial-gradient(${rgbToHex(
+    denormalize(backdropBase)
+  )},#777)`;
 };

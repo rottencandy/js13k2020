@@ -31,15 +31,12 @@ export let showLevelsMenu = () => {
   levelsGrid.append(backButton);
   levelsGrid.append(
     ...levels.map((level, i) => {
-      let ele = document.createElement("div");
-      ele.id = "level";
-      ele.innerText = i + 1;
-      ele.onclick = () => {
+      let ele = buttonElement(i + 1, "level", () => {
         gameState.level = i + 1;
         fadeOut();
         loadLevel(level);
         setTimeout(startGame, TIMEOUT_INTERVAL, false);
-      };
+      });
       return ele;
     })
   );
