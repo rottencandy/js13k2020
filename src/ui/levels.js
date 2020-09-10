@@ -8,6 +8,7 @@ import {
   textElement,
   setUIElement,
   TIMEOUT_INTERVAL,
+  getLevelsCompleted,
 } from "./utils";
 import { showMainMenu } from "./main";
 import { startGame } from "./start";
@@ -28,15 +29,20 @@ export let showLevelsMenu = () => {
   let levelsGrid = document.createElement("div");
   levelsGrid.id = "levelsgrid";
 
+  let completed = getLevelsCompleted();
   levelsGrid.append(backButton);
   levelsGrid.append(
     ...levels.map((level, i) => {
-      let ele = buttonElement(i + 1, "level", () => {
-        gameState.level = i + 1;
-        fadeOut();
-        loadLevel(level);
-        setTimeout(startGame, TIMEOUT_INTERVAL, false);
-      });
+      let ele = buttonElement(
+        i + 1,
+        i + 1 === completed ? "completelevel" : "level",
+        () => {
+          gameState.level = i + 1;
+          fadeOut();
+          loadLevel(level);
+          setTimeout(startGame, TIMEOUT_INTERVAL, false);
+        }
+      );
       return ele;
     })
   );

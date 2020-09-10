@@ -10,6 +10,7 @@ export let base = document.getElementById("ui"),
   VISIBLE = "visible",
   HIDDEN = "hidden",
   EMPTY = "",
+  storateString = "js13k-20-fourfold",
   TIMEOUT_INTERVAL = 500;
 
 export let create = (type, id, text) => {
@@ -40,3 +41,9 @@ export let setUIElement = (ele) => {
     denormalize(backdropBase)
   )})`;
 };
+
+export let getLevelsCompleted = () =>
+  Number(localStorage.getItem(storateString)) || 0;
+
+export let setLevelsCompleted = (level) =>
+  localStorage.setItem(storateString, level);

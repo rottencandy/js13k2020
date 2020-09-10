@@ -40,14 +40,14 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  transform:scaleY(1.1);
 }
 #text{
- color:#ccc;
+ color:#bbb;
  background:#222;
  margin:2rem auto;
 }
 input{
  font:inherit;
  width:100%;
- background:#ccc;
+ background:#bbb;
  padding:0;
  border:0;
  border-bottom:2px solid #222;
@@ -57,7 +57,7 @@ input{
 }
 #button,#backbutton,#pausebutton{
  font-size:2rem;
- background:#ccc;
+ background:#bbb;
  cursor:pointer;
  margin:1rem auto;
  padding:10px;
@@ -86,14 +86,15 @@ input{
  grid-gap:10px;
  grid-template-columns:repeat(4,1fr);
 }
-#level{
- background:#ccc;
+#level,#completelevel{
+ background:#bbb;
  cursor:pointer;
  text-align:center;
  padding:50px;
  align-self:center;
  transition:0.3s;
 }
+#completelevel{background:#acd}
 #controls{
 position:fixed;
 display:grid;
