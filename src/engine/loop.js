@@ -15,7 +15,7 @@ export let startLoop = (step, onEnd) => {
       dt = 500;
     }
     // Stop on falsey return and run callback
-    step(dt / 1000) ? requestAnimationFrame(loop) : onEnd();
+    step(dt / 1000, now) ? requestAnimationFrame(loop) : onEnd();
   };
   requestAnimationFrame(loop);
 };

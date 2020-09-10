@@ -18,9 +18,9 @@ export let compile = (gl, vshader, fshader) => {
   gl.attachShader(program, fs);
   gl.linkProgram(program);
 
-  //console.log("vertex shader:", gl.getShaderInfoLog(vs) || "OK");
-  //console.log("fragment shader:", gl.getShaderInfoLog(fs) || "OK");
-  //console.log("program:", gl.getProgramInfoLog(program) || "OK");
+  console.log("vertex shader:", gl.getShaderInfoLog(vs) || "OK");
+  console.log("fragment shader:", gl.getShaderInfoLog(fs) || "OK");
+  console.log("program:", gl.getProgramInfoLog(program) || "OK");
 
   return {
     program,
@@ -37,6 +37,7 @@ export let compile = (gl, vshader, fshader) => {
       jump: gl.getUniformLocation(program, "uJump"),
       color: gl.getUniformLocation(program, "uColor"),
       backdrop: gl.getUniformLocation(program, "uBackdrop"),
+      time: gl.getUniformLocation(program, "uTime"),
     },
   };
 };

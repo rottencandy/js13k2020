@@ -27,7 +27,7 @@ export let update = () => {
   return Platform.update();
 };
 
-export let draw = (gl) => {
-  Backdrop.draw(gl);
+export let draw = (gl, time) => {
+  Backdrop.draw(gl, time);
   Platform.draw(gl);
 };

@@ -48,22 +48,22 @@ export let initGame = (canvas, width, height) => {
   gl.enable(gl.LEQUAL);
 };
 
-export let gameLoop = (delta) => {
+export let gameLoop = (delta, time) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gameState.state = Scene.update(delta);
 
   clearScreen();
-  Scene.draw(gl);
+  Scene.draw(gl, time);
 
   return gameState.state === 1;
 };
 
-export let editorLoop = (delta) => {
+export let editorLoop = (delta, time) => {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gameState.state = Editor.update(delta);
 
   clearScreen();
-  Editor.draw(gl);
+  Editor.draw(gl, time);
 
   return gameState.state === 3;
 };
