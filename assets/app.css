@@ -1,5 +1,6 @@
 html{height:100%;}
 body{font:100 2.5rem Trebuchet,sans-serif;
+ background:radial-gradient(#89a,#454);
  margin:0;
  color:#222;
 }
@@ -23,7 +24,7 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  display:flex;
  height:100vh;
  flex-direction:column;
- background:rgba(50,50,50,0.2);
+ background:inherit;
 }
 #mainmenu,#pausemenu{
  display:flex;

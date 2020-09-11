@@ -1,5 +1,4 @@
 import { checkMonetization } from "../game";
-import { rgbToHex, denormalize, backdropBase } from "../palette";
 import { buttonClickSound } from "../sound/sounds";
 
 export let base = document.getElementById("ui"),
@@ -37,9 +36,6 @@ export let setUIElement = (ele) => {
   base.innerHTML = EMPTY;
   base.append(ele);
   checkMonetization();
-  base.style.background = document.body.style.background = `radial-gradient(#576,${rgbToHex(
-    denormalize(backdropBase)
-  )})`;
 };
 
 export let getLevelsCompleted = () =>
