@@ -16,7 +16,7 @@ export let base = document.getElementById("ui"),
 export let create = (type, id, text) => {
   let ele = document.createElement(type);
   ele.id = id;
-  ele.innerText = text;
+  ele.innerText = text || "";
   return ele;
 };
 

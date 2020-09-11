@@ -55,13 +55,14 @@ input{
 .wrong{
  border:3px solid red;
 }
-#button,#backbutton,#pausebutton{
+#button,#backbutton,#pausebutton,#dropitem{
  font-size:2rem;
  background:#bbb;
  cursor:pointer;
  margin:1rem auto;
  padding:10px;
  transition:0.3s;
+ border:0;
 }
 #button:hover,#level:hover,#backbutton:hover,#pausebutton:hover{
  background:#333;
@@ -86,6 +87,18 @@ input{
  grid-gap:10px;
  grid-template-columns:repeat(4,1fr);
 }
+#dropdown{
+ position:absolute;
+ visibility:hidden;
+ background:#ccc;
+ z-index:2;
+}
+#dropitem{
+ background:#ccc;
+ color:#222;
+ transition:0s;
+}
+#dropitem:hover{background:#aaa}
 #level,#completelevel{
  background:#bbb;
  cursor:pointer;
