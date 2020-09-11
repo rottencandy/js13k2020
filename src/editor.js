@@ -57,7 +57,15 @@ export let getEncodedLevel = () => {
         current = val;
         count = 0;
       } else {
-        count++;
+        // TODO: current level parser does not recognize double digits,
+        // so keep them small for now
+        if (count === 8) {
+          encodedRows.push(count + 1 + current);
+          current = val;
+          count = 0;
+        } else {
+          count++;
+        }
       }
     }
   }
@@ -184,12 +192,12 @@ export let update = () => {
   return 3;
 };
 
-export let draw = (gl) => {
+export let draw = (gl, time) => {
   Selector.draw(gl, parentTransform);
   loadTileBuffer(gl, parentTransform);
   tileData.forEach((row) => row.forEach((tile) => drawTile(gl, tile)));
 
-  Backdrop.draw(gl);
+  Backdrop.draw(gl, time);
 };
 
 let getNextTile = (curTile) => {
