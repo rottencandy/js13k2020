@@ -48,6 +48,7 @@ onkeydown = (e) => {
   if (keycode == 32) {
     Key.space = true;
   }
+  e.preventDefault && e.preventDefault();
 };
 
 // Keyup listener
