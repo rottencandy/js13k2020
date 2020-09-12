@@ -89,7 +89,7 @@ export let getTilesList = () => {
 };
 
 export let setEnterPos = (tile, index) => {
-  if (tile.zpos === 0) return;
+  if (!tile || tile.zpos === 0) return;
   switch (tile.type) {
     // start tile, behaves similar to "b"
     case "x":
@@ -107,6 +107,10 @@ export let setEnterPos = (tile, index) => {
 };
 
 export let checkTile = (tile) => {
+  // treat null as empty gap
+  if (!tile) {
+    return 2;
+  }
   switch (tile.type) {
     // Win
     case "c":
@@ -137,7 +141,7 @@ export let loadTileBuffer = (gl, parentTransform) => {
 };
 
 export let drawTile = (gl, tile) => {
-  if (tile.type === "a") {
+  if (!tile || tile.type === "a") {
     return;
   }
   gl.uniform3fv(program.uniforms.color, tileColor[tile.type]);
