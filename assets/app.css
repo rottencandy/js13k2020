@@ -41,14 +41,14 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  transform:scaleY(1.1);
 }
 #text{
- color:#bbb;
+ color:#ccc;
  background:#222;
  margin:2rem auto;
 }
 input{
  font:inherit;
  width:100%;
- background:#bbb;
+ background:#ccc;
  padding:0;
  border:0;
  border-bottom:2px solid #222;
@@ -58,7 +58,7 @@ input{
 }
 #button,#backbutton,#pausebutton,#dropitem{
  font-size:2rem;
- background:#bbb;
+ background:#ccc;
  cursor:pointer;
  margin:1rem auto;
  padding:10px;
@@ -101,7 +101,7 @@ input{
 }
 #dropitem:hover{background:#aaa}
 #level,#completelevel{
- background:#bbb;
+ background:#ccc;
  cursor:pointer;
  text-align:center;
  padding:50px;
@@ -121,16 +121,16 @@ grid-template-columns:1fr 1fr;
 width:0;
 height:0;
 margin:5px;
-border:30px solid #222;
+border:30px solid #333;
 border-radius:9px;
 cursor:pointer;
 }
 #b0:active,#b1:active,#b2:active,#b3:active{transform:scale(0.9)}
 
-#b0,#b1{border-bottom:30px solid #777}
-#b2,#b3{border-top:30px solid #777}
-#b0,#b2{border-right:30px solid #777}
-#b1,#b3{border-left:30px solid #777}
+#b0,#b1{border-bottom:30px solid #aaa}
+#b2,#b3{border-top   :30px solid #aaa}
+#b0,#b2{border-right :30px solid #aaa}
+#b1,#b3{border-left  :30px solid #aaa}
 .b4{position:absolute;left:10rem;}
 
 @media(max-width:540px){

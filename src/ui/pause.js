@@ -19,8 +19,8 @@ export let showPauseMenu = (onResume) => {
 
   let themeList = create("div", "dropdown");
   let themes = gameState.hasCoil
-    ? ["default", "night", "retro"]
-    : ["default", "night"];
+    ? ["morning", "night", "retrowave", "abstract"]
+    : ["morning", "night"];
   themeList.append(
     ...themes.map((val, i) => {
       let btn = buttonElement(val, "dropitem", () => changeBackdrop(i));
@@ -28,7 +28,7 @@ export let showPauseMenu = (onResume) => {
     })
   );
 
-  let themeButton = create("div", "button", "BACKGROUND ▾");
+  let themeButton = create("div", "button", "THEME ▾");
   themeButton.className = "themebtn";
   themeButton.append(themeList);
   // hack to simulate a dropdown menu
