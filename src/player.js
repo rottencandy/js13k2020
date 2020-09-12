@@ -180,7 +180,7 @@ export let draw = (gl) => {
 export let initPos = (x, y) => {
   X = targetPos[0] = activePos[0] = x;
   Y = targetPos[1] = activePos[1] = y;
-  state = Z = 0;
+  state = Z = jump = 0;
 
   // Looks scary but really isn't
   modelView = transform(identity(), {
