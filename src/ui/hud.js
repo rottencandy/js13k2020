@@ -28,8 +28,14 @@ export let enableTouchButton = buttonElement(
 // touch controls
 let touchButton = (id, key, content = "") => {
   let ele = textElement(content, id);
-  ele.onpointerdown = () => onkeydown({ keyCode: keyCodes[key] });
-  ele.onpointerup = () => onkeyup({ keyCode: keyCodes[key] });
+  ele.onpointerdown = (e) => {
+    onkeydown({ keyCode: keyCodes[key] });
+    e.preventDefault();
+  };
+  ele.onpointerup = (e) => {
+    onkeyup({ keyCode: keyCodes[key] });
+    e.preventDefault();
+  };
   return ele;
 };
 
