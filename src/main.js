@@ -3,8 +3,8 @@ import { showMainMenu } from "./ui/main.js";
 
 let canvas = document.getElementById("app");
 
-let WIDTH = 800,
-  HEIGHT = 600;
+let WIDTH = 1280,
+  HEIGHT = 720;
 
 let aspect = WIDTH / HEIGHT;
 canvas.width = WIDTH;

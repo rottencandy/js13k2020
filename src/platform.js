@@ -94,10 +94,10 @@ export let loadLevel = (levelData) => {
 
   {
     parentTransform = transform(identity(), {
-      y: gameWidth / 2,
-      x: gameHeight / 2,
+      x: gameWidth / 3,
+      y: (gameHeight * 2) / 3,
       rx: -degToRad(30),
-      rz: -Math.PI / 4,
+      rz: -0.5,
     });
   }
   // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
