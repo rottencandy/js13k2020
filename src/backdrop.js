@@ -78,7 +78,7 @@ float star(vec2 p, float r) {
 vec3 layer(vec2 u) {
   vec2 grid = fract(u) - .5;
   vec2 id = floor(u) / 8.;
-  float size = newrand(id, 1.)/30.; 
+  float size = newrand(id, 1.)/40.; 
   float stars = star(grid + vec2((newrand(id, 10.)-.5)/2., (newrand(id, 20.)-.5)/2.), size);
   vec3 col = sin(vec3(newrand(id, 35.),newrand(id, 66.),newrand(id,93.))*2.+uTime) / 2. + .5;
   col *= vec3(.8,.7,.9);
