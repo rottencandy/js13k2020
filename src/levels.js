@@ -1,7 +1,16 @@
 export let levels = [
   "7:5bca6ba6ba6bax5ba",
   "6:x3bab5ab5ab5ab6a5ac",
-  "7:5babx4bac5bab",
+  "7:5babx4bab5bac",
+  "8:cab5a2aba2b2axb6aa2ba2b2a",
+  "10:2bab6a3ab6a2bacabx3a4a2b4aa2b7aaba2b5",
   "7:bab3acbab3abbab3abxababab4abab",
-  "2:bxac",
+  "9:2baxbab2a6ab2ac2a2b4ab5ab2a3a2bab2a",
+  "5:3bacb4axb3a2b3a",
+  "7:2ac4a2ab4a7aa2b4abx2b3a",
+  "6:x3b2a6a2a2bac",
+  "6:x2babaa2baba3a2ba3abac",
+  "9:3aba4bxbab5a3a2b2aba5acaba",
+  "6:abab2aaba2baxb2abaaba2ba6a3ac2a",
+  "6:b3dadxb2dadb3dac",
 ];
