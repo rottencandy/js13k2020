@@ -3,6 +3,7 @@ body{font:100 2.5rem Trebuchet,sans-serif;
  background:radial-gradient(#89a,#454);
  margin:0;
  color:#222;
+ overflow-x:hidden;
 }
 .centered{
  position:absolute;
