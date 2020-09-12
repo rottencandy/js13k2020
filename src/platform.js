@@ -102,6 +102,8 @@ export let loadLevel = (levelData) => {
   }
   // Fastest array initialization https://stackoverflow.com/q/1295584/7683374
   (parsedTiles = []).length = gridWidth * gridWidth;
+  // init with tile gap
+  parsedTiles.fill("a");
   // First, create array of decoded tile chars
   for (let i = 0, curPos = 0; i < tiles.length; i++) {
     let val = tiles.charAt(i);

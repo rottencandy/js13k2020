@@ -60,7 +60,7 @@ export let createTileData = (x, y, type, startAtZero = false) => {
     case "a":
       return {
         type,
-        zpos: 0,
+        zpos: STARTZPOS,
         modelView: identity(),
       };
     case "x":
