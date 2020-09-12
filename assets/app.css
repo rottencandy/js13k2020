@@ -134,7 +134,7 @@ cursor:pointer;
 .b4{position:absolute;left:10rem;}
 
 @media(max-width:540px){
- #levelsgrid{grid-template-columns:repeat(3,1fr)}
+ #levelsgrid{grid-template-columns:repeat(2,1fr)}
  body{font:100 2rem Trebuchet,sans-serif}
  #subtitle{margin:3rem auto}
  #button,#backbutton,#pausebutton{font-size:1.5rem}
