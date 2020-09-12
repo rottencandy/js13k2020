@@ -10,6 +10,7 @@ import {
   textElement,
   setUIElement,
   setLevelsCompleted,
+  getLevelsCompleted,
 } from "./utils";
 import { showMainMenu } from "./main";
 import { showEditCompleteMenu, showPauseMenu } from "./pause";
@@ -36,7 +37,9 @@ let levelCompleted = (isCustom) => {
   });
 
   finishedSound();
-  isCustom || setLevelsCompleted(gameState.level);
+  isCustom ||
+    (getLevelsCompleted() < gameState.level &&
+      setLevelsCompleted(gameState.level));
   wrapper.append(title, continueButton, mainMenuButton);
   setUIElement(wrapper);
 };
