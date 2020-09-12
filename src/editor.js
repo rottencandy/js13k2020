@@ -23,10 +23,10 @@ export let reset = () => {
   state = 0;
   Camera.update(sceneWidth, sceneHeight);
   parentTransform = transform(identity(), {
-    y: sceneWidth / 2,
-    x: sceneHeight / 2,
+    x: sceneWidth / 3,
+    y: (sceneHeight * 2) / 3,
     rx: -degToRad(30),
-    rz: -Math.PI / 4,
+    rz: -0.5,
   });
   negativeX = negativeY = gridWidth = 1;
   Selector.reset();
@@ -49,18 +49,19 @@ export let getEncodedLevel = () => {
   for (let y = 0; y < gridWidth; y++) {
     let row = platforms[y],
       current = row[0],
+      fullRow = "",
       count = 0;
     for (let x = 1; x <= gridWidth; x++) {
       let val = row[x];
       if (val !== current) {
-        encodedRows.push(count < 1 ? current : count + 1 + current);
+        fullRow += count < 1 ? current : count + 1 + current;
         current = val;
         count = 0;
       } else {
         // TODO: current level parser does not recognize double digits,
-        // so keep them small for now
+        // so kept them small for now
         if (count === 8) {
-          encodedRows.push(count + 1 + current);
+          fullRow += count + 1 + current;
           current = val;
           count = 0;
         } else {
@@ -68,6 +69,7 @@ export let getEncodedLevel = () => {
         }
       }
     }
+    encodedRows.push(fullRow);
   }
   // Uncommented because this need to affect gridWidth value
   // TODO: this still doesn't trim empty columns
@@ -76,11 +78,17 @@ export let getEncodedLevel = () => {
   //while (encodedRows[rowLength--] === gridWidth + "a") {
   //  encodedRows.pop();
   //}
-  //// trim empty rows from top
-  //rowLength = 0;
-  //while (encodedRows[rowLength++] === gridWidth + "a") {
-  //  encodedRows.shift();
-  //}
+
+  // trim empty rows from top
+  rowLength = 0;
+  while (encodedRows[rowLength++] === gridWidth + "a") {
+    encodedRows.shift();
+  }
+  // trim empty rows from bottom
+  rowLength = gridWidth - 1;
+  while (encodedRows[rowLength--] === gridWidth + "a") {
+    encodedRows.pop();
+  }
   return gridWidth + ":" + encodedRows.reduce((acc, val) => acc + val, "");
 };
 
