@@ -58,11 +58,15 @@ export let update = (delta) => {
           levelFinished = true;
         }
       }
+      platforms.forEach((tile, i) =>
+        Tile.updateState(tile, i === Player.X + gridWidth * Player.Y)
+      );
       return 1;
-    // Wait for animation
+    // Wait for player move animation
     case 2:
       if (Player.update()) {
         Player.initPos(initPos[0], initPos[1]);
+        platforms.forEach((tile) => Tile.resetState(tile));
         state = 1;
         if (levelFinished) {
           return 0;

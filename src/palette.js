@@ -9,6 +9,8 @@ export let tileColor = {
   b: [0.939, 0.131, 0.125],
   // destination tile
   c: [0.502, 0.847, 0.412],
+  // one step tile
+  d: [0.91, 0.82, 0.14],
 };
 
 export let playerColor = [0.44, 0.525, 0.627];

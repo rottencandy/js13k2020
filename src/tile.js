@@ -3,6 +3,7 @@ import * as Camera from "./engine/camera";
 import { identity, transform } from "./engine/math";
 import { partialCube, partialCubeNormal } from "./shapes";
 import { lightDirection, tileColor, backdropBase } from "./palette";
+import { gameState } from "./game";
 
 export let TILEGAP = 10,
   TILEWIDTH = 50,
@@ -79,13 +80,25 @@ export let createTileData = (x, y, type, startAtZero = false) => {
           z: startAtZero ? 0 : STARTZPOS,
         }),
       };
+    case "d":
+      return {
+        type,
+        steps: 1,
+        oSteps: 1,
+        zpos: STARTZPOS,
+        modelView: transform(identity(), {
+          x: x * TILEWIDTH + TILEGAP * x,
+          y: y * TILEWIDTH + TILEGAP * y,
+          z: startAtZero ? 0 : STARTZPOS,
+        }),
+      };
     default:
       return null;
   }
 };
 
 export let getTilesList = () => {
-  return ["x", "a", "b", "c"];
+  return gameState.hasCoil ? ["x", "a", "b", "c", "d"] : ["x", "a", "b", "c"];
 };
 
 export let setEnterPos = (tile, index) => {
@@ -99,6 +112,8 @@ export let setEnterPos = (tile, index) => {
     case "b":
     // destination tile
     case "c":
+    // one step tile
+    case "d":
       // cleanup if tile moved too far away, else move it up gradually
       let displace = tile.zpos < 0 ? -tile.zpos : -7 - (index + 1);
       transform(tile.modelView, { z: displace });
@@ -118,9 +133,46 @@ export let checkTile = (tile) => {
     // Fall
     case "a":
       return 2;
+    case "d":
+      // stepping, fall down next
+      if (tile.steps) {
+        tile.steps--;
+      } else if (tile.zpos > 0) {
+        return 2;
+      }
     // Continue
     default:
       return 0;
+  }
+};
+
+export let updateState = (tile, isPlayerOn) => {
+  if (!tile) {
+    return;
+  }
+  if (tile.type === "d") {
+    // available steps of tile exhausted, fall
+    if (!isPlayerOn && !tile.steps) {
+      tile.zpos += 20;
+      transform(tile.modelView, { z: 20 });
+      // reached the end. can ignore tile from now
+      if (tile.zpos >= STARTZPOS) {
+        tile.type = "a";
+      }
+    }
+  }
+};
+
+export let resetState = (tile) => {
+  if (!tile) {
+    return;
+  }
+  // this is a step tile
+  if (tile.oSteps) {
+    tile.type = "d";
+    tile.steps = tile.oSteps;
+    transform(tile.modelView, { z: -tile.zpos });
+    tile.zpos = 0;
   }
 };
 

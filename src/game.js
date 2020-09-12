@@ -34,7 +34,7 @@ let gl;
 let clearScreen = () => gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 export let initGame = (canvas, width, height) => {
-  gl = canvas.getContext("webgl", { antialias: false });
+  gl = canvas.getContext("webgl");
 
   Camera.update(width, height);
   Scene.init(gl, width, height);
