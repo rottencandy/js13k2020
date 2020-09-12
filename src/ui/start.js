@@ -9,6 +9,7 @@ import {
   buttonElement,
   textElement,
   setUIElement,
+  setLevelsCompleted,
 } from "./utils";
 import { showMainMenu } from "./main";
 import { showEditCompleteMenu, showPauseMenu } from "./pause";
@@ -16,7 +17,6 @@ import { showHUD } from "./hud";
 import { showCustomLevelsMenu } from "./custom";
 import { showLevelsMenu } from "./levels";
 
-// TODO: update localstorage
 let levelCompleted = (isCustom) => {
   let wrapper = document.createElement("div");
   wrapper.id = "pausemenu";
@@ -36,6 +36,7 @@ let levelCompleted = (isCustom) => {
   });
 
   finishedSound();
+  isCustom || setLevelsCompleted(gameState.level);
   wrapper.append(title, continueButton, mainMenuButton);
   setUIElement(wrapper);
 };

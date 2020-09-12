@@ -100,15 +100,16 @@ input{
  transition:0s;
 }
 #dropitem:hover{background:#aaa}
-#level,#completelevel{
- background:#ccc;
+#level{
  cursor:pointer;
  text-align:center;
  padding:50px;
  align-self:center;
  transition:0.3s;
 }
-#completelevel{background:#acd}
+.active{background:#ccc}
+.completed{background:#acd}
+.blocked{background:#999}
 #controls{
 position:fixed;
 display:grid;

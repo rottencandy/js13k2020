@@ -33,18 +33,20 @@ export let showLevelsMenu = () => {
   levelsGrid.append(backButton);
   levelsGrid.append(
     ...levels.map((level, i) => {
+      let startFunc = () => {
+        gameState.level = i + 1;
+        fadeOut();
+        loadLevel(level);
+        setTimeout(startGame, TIMEOUT_INTERVAL, false);
+        window.scrollTo(0, 0);
+      };
       let ele = buttonElement(
         i + 1,
-        i + 1 === completed ? "completelevel" : "level",
-        () => {
-          gameState.level = i + 1;
-          fadeOut();
-          loadLevel(level);
-          setTimeout(startGame, TIMEOUT_INTERVAL, false);
-          // for when grid is scrolled to bottom
-          window.scrollTo(0, 0);
-        }
+        "level",
+        i <= completed ? startFunc : () => {}
       );
+      ele.className =
+        i < completed ? "completed" : i > completed ? "blocked" : "active";
       return ele;
     })
   );
