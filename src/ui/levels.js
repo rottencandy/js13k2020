@@ -41,6 +41,8 @@ export let showLevelsMenu = () => {
           fadeOut();
           loadLevel(level);
           setTimeout(startGame, TIMEOUT_INTERVAL, false);
+          // for when grid is scrolled to bottom
+          window.scrollTo(0, 0);
         }
       );
       return ele;
