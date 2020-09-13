@@ -45,6 +45,8 @@ let levelCompleted = (isCustom) => {
 };
 
 export let startGame = (isEditor) => {
+  // set ui elements to null to hide scrollbar
+  setUIElement();
   base.style.visibility = HIDDEN;
   showHUD(isEditor);
 
