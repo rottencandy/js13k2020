@@ -38,7 +38,6 @@ export let showLevelsMenu = () => {
         fadeOut();
         loadLevel(level);
         setTimeout(startGame, TIMEOUT_INTERVAL, false);
-        window.scrollTo(0, 0);
       };
       let ele = buttonElement(
         i + 1,
