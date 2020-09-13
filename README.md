@@ -1,5 +1,5 @@
 # Fourfold
 
-A HTML5 game created for the [JS13kGames](https://js13kgames.com/) competition.
+A game created for the [js13kGames](https://js13kgames.com/) competition.
 
-[Making of/analysis WIP]
+[Making of/analysis: WIP]
