@@ -11,6 +11,7 @@ import {
   setUIElement,
   setLevelsCompleted,
   getLevelsCompleted,
+  create,
 } from "./utils";
 import { showMainMenu } from "./main";
 import { showEditCompleteMenu, showPauseMenu } from "./pause";
@@ -40,7 +41,21 @@ let levelCompleted = (isCustom) => {
   isCustom ||
     (getLevelsCompleted() < gameState.level &&
       setLevelsCompleted(gameState.level));
-  wrapper.append(title, continueButton, mainMenuButton);
+  // show special message if all levels completed
+  if (gameState.level === 20) {
+    let endMessage = create(
+      "p",
+      "",
+      "You have completed all the levels. Now go create your own!"
+    );
+    let customLevelsButton = buttonElement("CUSTOM LEVELS", "button", () => {
+      fadeOut();
+      setTimeout(showCustomLevelsMenu, 500);
+    });
+    wrapper.append(title, endMessage, customLevelsButton, mainMenuButton);
+  } else {
+    wrapper.append(title, continueButton, mainMenuButton);
+  }
   setUIElement(wrapper);
 };
 
