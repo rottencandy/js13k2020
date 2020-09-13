@@ -71,6 +71,13 @@ export let showEditCompleteMenu = () => {
   levelText.value = Editor.getEncodedLevel();
   levelText.readOnly = true;
 
+  let tweetButton = create("a", "button", "SHARE 🐦");
+  tweetButton.href =
+    "https://twitter.com/intent/tweet?url=https%3A%2F%2Fjs13kgames.com%2Fentries%2Ffourfold&text=Checkout%20this%20custom%20level%20I%20made%20in%20Fourfold%3A%20%22" +
+    levelText.value.replace(":", "%3A") +
+    "%22";
+  tweetButton.target = "_blank";
+
   let mainMenuButton = buttonElement("MAIN MENU", "button", () => {
     fadeOut();
     setTimeout(showMainMenu, 500);
@@ -82,6 +89,6 @@ export let showEditCompleteMenu = () => {
     levelText.select();
   }, 50);
 
-  wrapper.append(title, levelText, mainMenuButton);
+  wrapper.append(title, levelText, tweetButton, mainMenuButton);
   setUIElement(wrapper);
 };
