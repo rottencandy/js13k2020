@@ -19,36 +19,42 @@ export let keyCodes = {
 // Keydown listener
 onkeydown = (e) => {
   let keycode = e.keyCode;
+  let preventMovement = () => e.preventDefault && e.preventDefault();
   // Up (up / W / Z)
   if (keycode == 38 || keycode == 90 || keycode == 87) {
     Key.up = true;
+    preventMovement();
   }
 
   // Right (right / D)
   if (keycode == 39 || keycode == 68) {
     Key.right = true;
+    preventMovement();
   }
 
   // Down (down / S)
   if (keycode == 40 || keycode == 83) {
     Key.down = true;
+    preventMovement();
   }
 
   // Left (left / A / Q)
   if (keycode == 37 || keycode == 65 || keycode == 81) {
     Key.left = true;
+    preventMovement();
   }
 
   // Esc
   if (keycode == 27) {
     Key.esc = true;
+    preventMovement();
   }
 
   // space
   if (keycode == 32) {
     Key.space = true;
+    preventMovement();
   }
-  e.preventDefault && e.preventDefault();
 };
 
 // Keyup listener
