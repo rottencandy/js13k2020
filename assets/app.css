@@ -1,10 +1,12 @@
 html{height:100%;}
-body{font:100 2.5rem Trebuchet,sans-serif;
+body{
+ font:100 2.5rem Trebuchet,sans-serif;
  background:radial-gradient(#89a,#454);
  margin:0;
- color:#222;
+ color:#333;
  overflow-x:hidden;
 }
+p{font-size:1.5rem;font-weight:150}
 .centered{
  position:absolute;
  left:0;
@@ -112,20 +114,20 @@ input{
 .completed{background:#acd}
 .blocked{background:#999}
 #controls{
-position:fixed;
-display:grid;
-bottom:0;
-left:50%;
-transform:translateX(-50%);
-grid-template-columns:1fr 1fr;
+ position:fixed;
+ display:grid;
+ bottom:0;
+ left:50%;
+ transform:translateX(-50%);
+ grid-template-columns:1fr 1fr;
 }
 #b0,#b1,#b2,#b3{
-width:0;
-height:0;
-margin:5px;
-border:30px solid #333;
-border-radius:9px;
-cursor:pointer;
+ width:0;
+ height:0;
+ margin:5px;
+ border:30px solid #333;
+ border-radius:9px;
+ cursor:pointer;
 }
 #b0:active,#b1:active,#b2:active,#b3:active{transform:scale(0.9)}
 
