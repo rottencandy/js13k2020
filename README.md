@@ -2,7 +2,7 @@
 
 A game created for the [js13kGames](https://js13kgames.com/) competition.  Play it [here](https://js13kgames.com/entries/fourfold).
 
-[Making of/analysis: WIP]
+Making of/analysis: [saud.gq/blog/fourfold](https://saud.gq/blog/fourfold/)
 
 ## Build
 
@@ -29,6 +29,12 @@ Generated files will be stored in the `app` directory.
 ```sh
 yarn bundle
 ```
+
+## Stuff used
+
+[esbuild](https://github.com/evanw/esbuild) for minification & bundling.
+
+[ZzFXM](https://github.com/keithclark/ZzFXM) for sound.
 
 ## License
 MIT
