@@ -2,7 +2,7 @@
 
 A game created for the [js13kGames](https://js13kgames.com/) competition.  Play it [here](https://js13kgames.com/entries/fourfold).
 
-Making of/analysis: [saud.gq/blog/fourfold](https://saud.gq/blog/fourfold/)
+Making of/analysis: [saud.wtf/blog/fourfold](https://saud.wtf/blog/fourfold/)
 
 ## Build
 
@@ -12,7 +12,7 @@ yarn install
 ```
 
 ### Development build:
-(no code minification, create sourcemap)
+(no code minification, creates sourcemap)
 ```sh
 yarn devbuild
 ```

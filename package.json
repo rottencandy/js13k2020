@@ -4,11 +4,11 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "prebuild": "mkdir -p app && cp assets/* app/",
+    "prebuild": "mkdir -p app && cp static/* app/",
     "build": "esbuild --bundle --minify --outdir=app src/main.js",
-    "preroll": "mkdir -p app && cp assets/* app/",
+    "preroll": "mkdir -p app && cp static/* app/",
     "roll": "rollup --config",
-    "predevbuild": "mkdir -p app && cp assets/* app/",
+    "predevbuild": "mkdir -p app && cp static/* app/",
     "devbuild": "esbuild --bundle --outdir=app src/main.js",
     "bundle": "./bundle.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
