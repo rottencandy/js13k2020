@@ -4,11 +4,13 @@ import { setBackdropColor } from "./palette";
 let vertexBuffer, program1, program2, program3, program4, activeProgram;
 
 let vshader = `attribute vec2 aVertexPosition;
+uniform float uAspect;
 varying vec2 vST;
 
 void main() {
   gl_Position = vec4(aVertexPosition.xy, .9, 1.);
   vST = (aVertexPosition+1.)/2.;
+  vST.x = vST.x * uAspect;
 }`;
 
 let fsImports = `precision mediump float;
@@ -55,7 +57,7 @@ let fshader1 =
 void main() {
   vec3 col = vec3(.58,.64,.75);
   float light = 1.-circle(vec2(.8,.9),.1);
-  float mnt1 = step(vST.y, abs( sin(vST.x * 8. + uTime) ) / 4. + .3) / 3.;
+  float mnt1 = step(vST.y, abs( sin(vST.x * 8. + uTime) ) / 6. + .3) / 3.;
   float mnt2 = step(vST.y, abs( cos(vST.x * 6. - uTime) ) / 4. + .1) / 2.;
   vec3 back = mix(vec3(light+max(mnt1,mnt2)), col, .7);
   gl_FragColor = vec4(vec3(back), 1.0);
@@ -172,5 +174,6 @@ export let draw = (gl, time) => {
 
   vertexBuffer.bind(2, activeProgram.attribs.vertex);
   gl.uniform1f(activeProgram.uniforms.time, time / 10000);
+  gl.uniform1f(activeProgram.uniforms.aspect, 1280 / 720);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };

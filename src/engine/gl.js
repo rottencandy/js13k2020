@@ -40,6 +40,7 @@ export let compile = (gl, vshader, fshader) => {
       color2: gl.getUniformLocation(program, "uColor2"),
       backdrop: gl.getUniformLocation(program, "uBackdrop"),
       time: gl.getUniformLocation(program, "uTime"),
+      aspect: gl.getUniformLocation(program, "uAspect"),
     },
   };
 };
